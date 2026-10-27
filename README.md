@@ -1,6 +1,6 @@
 # 哔哩哔哩 Loon 去广告 v1.2.0（复写测试版）
 
-本版按用户要求改用纯原生 Rewrite，不引用 JS，也没有 Script 配置或插件参数依赖。当前仓库只保留本版插件与说明。之前的 JS 版已完整备份到本地，Git 历史也保留。
+本版按用户要求改用纯原生 Rewrite，不引用 JS，也没有 Script 配置或插件参数依赖。当前仓库提供本版哔哩哔哩插件与已恢复的酷狗 v1.1.0 复写插件。之前的 JS 版已完整备份到本地，Git 历史也保留。
 
 ## 导入与测试
 
@@ -48,3 +48,7 @@ X-Bilibili-AdBlock: 1.2.0-rewrite
 仓库不含原始 HAR、账户信息、令牌或私人配置。
 
 [Loon 原生 Rewrite 文档](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+
+## 已恢复：酷狗音乐 v1.1.0（复写版）
+
+[原订阅链接](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)已按清理前的本地备份原样恢复。开启复写与 MitM；该文件不引用 JS，可与哔哩哔哩插件同时启用。
