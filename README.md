@@ -3,10 +3,10 @@
 | 插件 | 当前版本 | 覆盖范围 |
 | --- | --- | --- |
 | [酷狗音乐](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin) | 1.1.0 | 开屏、横幅、侧栏与广告 SDK 策略 |
-| [哔哩哔哩](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock.plugin) | 1.0.0 | 开屏、品牌及活动启动画面、首页横幅与信息流广告卡片 |
+| [哔哩哔哩](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock.plugin) | 1.1.0（脚本版） | 开屏、整块首页轮播、会员购推广卡片与信息流广告 |
 | [雷神加速器](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Leigod-AdBlock.plugin) | 1.0.0 | 已抓到的横幅和促销位；尝试关闭 ToBid 开屏配置，效果待验证 |
 
-将对应链接添加到 **Loon → 插件**，开启复写与 MitM 并信任证书；无需单独导入 JS。需要 Loon 3.5.1 (978) 或更新版本。每个 App 可独立启用；测试时避免同时启用该 App 的其他去广告插件。
+将对应链接添加到 **Loon → 插件**，开启复写、脚本与 MitM 并信任证书；插件自动引用所需 JS，无需另建脚本订阅。需要 Loon 3.5.1 (978) 或更新版本。每个 App 可独立启用；测试时避免同时启用该 App 的其他去广告插件。
 
 新增两款插件的接口范围、开关和验证限制见 [哔哩哔哩与雷神插件说明](MultiApp-AdBlock.md)。本仓库不包含原始 HAR、账户信息或私人配置。
 
