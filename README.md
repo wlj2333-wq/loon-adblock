@@ -1,52 +1,71 @@
-# 酷狗音乐 Loon 去广告插件
+# 酷狗音乐 Loon 去广告 v1.1.0（复写版）
 
-根据一次酷狗音乐 iOS 抓包制作，抓包中的 `clientver` 为 `20835`。插件由 10 条规则组成，覆盖 15 个已观察到的接口。
+当前订阅使用 Loon 原生 Rewrite，在第一版的基础上补充后续抓包发现的广告域名和接口。
 
-## 安装
+## 安装或更新
 
-需要 **Loon 3.5.1 (978) 或更新版本**，使用原生 Rewrite 和 JQ，单个插件文件即可使用。
+```text
+https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin
+```
 
-1. 复制下面的订阅地址，在 Loon 的插件页面添加并启用：
+1. 在 Loon 插件页面更新这个订阅，名称应显示 **酷狗音乐去广告 v1.1.0（复写版）**。
+2. 开启 **复写（Rewrite）和 MitM**，安装并信任自己的 Loon MitM 证书。需要 Loon 3.5.1 (978) 或更新版本。
+3. 验证时只启用这一份酷狗去广告插件，完全退出酷狗、重新连接 Loon，再打开酷狗测试。
 
-   ```text
-   https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin
-   ```
+本版不需要单独导入 JS；执行信息在请求详情的复写记录中。看不到脚本执行日志是本版的预期行为。
 
-2. 在 Loon 中启用复写和 MitM，并安装、信任自己的 Loon MitM 证书。插件已列出需要解密的四个域名。
-3. 完全退出酷狗音乐，再重新打开。已有缓存广告可能需要等待缓存过期；如果 App 提供广告或图片缓存清理，可先清理缓存。
-4. 插件设置中默认开启「开屏广告」「横幅和推广」「广告上报」。可按需开启「促销弹窗」。
+## 最新抓包证据
 
-也可以下载 [KuGou-AdBlock.plugin](./KuGou-AdBlock.plugin) 后，通过 Loon 支持的文件导入方式安装。仓库订阅需要该文件可被手机直接访问。
+用户提供的第三份酷狗 HAR 包含 526 条请求，其中 30 条带有第一版规则的复写记录和响应修改标记。已观察到：
 
-## 处理内容
+| 接口 | 抓包中的结果 |
+| --- | --- |
+| `gateway.kugou.com/ads.gateway/v4/mobile_splash` | 已命中复写，`boot_ads`、`front_ads`、`discard` 均为空 |
+| `gateway.kugou.com/adp/ad/v1/mine_top_banner` | 已命中复写，广告列表为空 |
+| `gateway.kugou.com/adservice/v3/vip_center` | 11 次请求均有复写记录，返回的广告列表为空 |
+| `gateway.kugou.com/aterouter/v2/get_dialog` | 已命中用户开启的可选弹窗规则，弹窗列表为空 |
+| `ads.service.kugou.com/v4/mobile_splash_sort` | 第一版未覆盖这个补发域名，`least_ads` 仍有 1 条 |
+| `gateway.kugou.com/ads.gateway/v3/mobile_down` | 第一版未覆盖，返回 2 条广告 |
+| `gateway.kugou.com/ads.gateway/v2/sidebar_link` | 第一版未覆盖，返回 14 条广告 |
+| `ad.tencentmusic.com/sdk/ad/strategies` | 第一版未覆盖的新 SDK 域名，响应带加密标记 |
 
-| 开关 | 接口范围 | 处理方式 |
+这些记录确认第一版在此次测试中已执行。此前“所有规则没有执行记录”的现象与本次结果已经不同，不能再据旧抓包判断复写未启用。
+
+## v1.1.0 补充内容
+
+- 开屏补发同时覆盖 `adserviceretry.kglink.cn` 和 `ads.service.kugou.com`，处理 `/v4/mobile_splash_sort` 中的补发、兜底及相关列表。
+- 补充底部广告 `mobile_down`、侧栏 `sidebar_link`、`sidebar_top_card` 和首页 `home_card` 的广告列表清理。
+- 对 `/adp/ad/v1/home_combine` 中已存在的 `data.home_city_rankings.ads` 数组做清理。
+- 增加「广告SDK策略」开关：对 `mc.tencentmusic.com`、`ad.tencentmusic.com` 的 `/sdk/ad/strategies` 请求，仅当 User-Agent 以 `kugou/` 开头时在本地返回 503，阻断该广告策略请求。未改写共享主机的其他配置接口。
+
+SDK 广告策略响应是加密数据，因此使用请求拦截。此开关可能影响看广告领奖等依赖广告展示的功能，可单独关闭。
+
+## 插件开关
+
+| 开关 | 默认 | 作用 |
 | --- | --- | --- |
-| 开屏广告 | `gateway.kugou.com/ads.gateway/v4/mobile_splash` | 清空 `boot_ads`、`front_ads`、`discard`，保留其他配置 |
-| 开屏广告 | `adserviceretry.kglink.cn/v4/mobile_splash_sort` | 清空补发、兜底广告和相关曝光 ID 列表 |
-| 横幅和推广 | `adservice/v3/vip_center`、`ads.service/v3/vip_center` | 清空会员页面广告列表 |
-| 横幅和推广 | `ads.gateway/v3/mine_link`、`adp/ad/v1/mine_top_banner`、`adp/ad/v1/multi_page_pendant` | 清空我的页面广告和跨页面广告挂件 |
-| 横幅和推广 | `ads.gateway/v2/mobile_link` | 清空推广入口列表；可能同时隐藏该接口提供的活动入口 |
-| 横幅和推广 | `ads.gateway/v2/task_center_entrance` | 清空任务中心入口横幅 |
-| 横幅和推广 | `fx.service.kugou.com/mfx-kugoulive/ad/query_all` | 本地返回空广告列表 |
-| 广告上报 | `ads.gateway/v3/stat_expose`、`ads.gateway/v3/stat_click`、`adp/stat/v1/expose` | 本地返回对应结构的成功响应 |
-| 促销弹窗（默认关闭） | `aterouter/v2/get_dialog`、`vipdress.kugou.com/v1/dress_sales/get_popup_for_package` | 清空运营弹窗列表或关闭装扮促销弹窗；可能同时隐藏其他运营提示 |
+| 开屏广告 | 开 | 清理开屏和开屏补发列表 |
+| 横幅和推广 | 开 | 清理已覆盖接口中的横幅、推广入口和广告数组 |
+| 广告上报 | 开 | 本地返回曝光、点击接口的空成功响应 |
+| 广告SDK策略 | 开 | 拦截酷狗客户端的统一广告策略请求 |
+| 促销弹窗 | 关 | 可选清理运营弹窗与装扮促销弹窗，可能同时隐藏其他运营提示 |
 
-表中未标注域名的路径属于 `gateway.kugou.com`。规则按域名和完整路径匹配，使用查询参数边界，避免扩大到整个业务域名。
+## 如何验证
 
-广告内容主要在收到响应后清理，保留原有成功状态和其余字段。直播广告与三类上报接口使用 Loon 原生 Mock，在请求发往服务器前直接返回。脚本不会上传日志，也不依赖外部 JavaScript 文件。
+- 在复写记录中确认对应请求命中本插件；开屏主接口和补发接口不一定出现在脚本记录列表里。
+- 开屏主接口的 `data.boot_ads`、`data.front_ads` 应为空。
+- 两个开屏补发域名的 `data.least_ads`、`data.retry_ads` 应为空。
+- 启用 SDK 开关后，符合酷狗 User-Agent 条件的广告策略请求应在本地返回 503，这是该条拦截规则的预期结果。
+- 缓存广告仍可能显示，需完全退出酷狗后重试，或使用酷狗提供的相关缓存清理功能。
 
-## 检查结果与限制
+## 验证范围
 
-- 本地检查了抓包中的 **755 条请求**；15 个目标接口全部匹配，没有命中其余接口。
-- 默认开启的规则命中 40 条抓包请求；可选弹窗规则另匹配 4 条。重复请求计入数量。
-- 正则的域名后缀、路径后缀和普通业务 URL 反例检查通过；三种 Mock 响应的根字段、数据类型及成功状态与抓包结构一致。
-- 发布文件检查未发现从抓包查询参数中复制的账号标识、Token 或签名。原始 HAR、请求头和响应原文不在仓库内。
-- **尚未在 Loon/iPhone 上实测，也未运行 Loon 的原生 JQ 引擎。** 静态检查不等于手机上的完整效果验证。App 更新、缓存、其他广告渠道或无法被 MitM 解密的连接都可能导致广告残留。
-- 只处理本次抓包中明确识别的接口。无法解析为 JSON 的广告 SDK 响应未做改写。
+本地扫描了三份 HAR，共 **1,805 条请求**，检查正则编译、域名及路径边界、规则重叠、原有 JQ 表达式保留、内联 JSON、SDK User-Agent 条件及发布内容凭据扫描，均通过。累计识别并覆盖 8 个第一版未覆盖的域名与路径组合。
 
-如果导入提示版本或语法错误，请先更新 Loon。如果有功能异常，可先关闭「促销弹窗」或「横幅和推广」，再完全退出并重新打开 App；停用整个插件可撤销这些规则。
+第一版原有规则已有本次手机抓包的执行证据；**本版新增规则仍需更新后在手机上验证**。本地未运行 Loon 的原生 JQ 引擎，也没有把静态匹配检查当作手机实测。广告 SDK 的缓存、额外渠道和 App 后续更新可能导致广告残留。
 
-## 格式参考
+## 文档
 
-插件按 [Loon 插件文档](https://nsloon.app/docs/Plugin/) 和 [Rewrite 文档](https://nsloon.app/docs/Rewrite/rewrite_v2/) 编写。JSON 响应处理使用原生 JQ；Mock 的执行时机与配置方式见 Rewrite 文档。
+- [Loon Rewrite](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+- [Loon 插件](https://nsloon.app/docs/Plugin/)
+- [Loon MitM](https://nsloon.app/docs/MitM/)
