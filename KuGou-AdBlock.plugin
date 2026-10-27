@@ -1,5 +1,5 @@
-#!name = 酷狗音乐去广告
-#!desc = 根据 clientver 20835 抓包制作，清理开屏、横幅、推广入口及广告上报。促销弹窗可选。需开启 MitM；实际效果需手机验证。
+#!name = 酷狗音乐去广告 v1.1.0（复写版）
+#!desc = 基于已验证的第一版复写，补齐开屏补发域名、底部和侧栏广告，支持酷狗 SDK 广告策略拦截。需启用复写及 MitM。
 #!author = wlj2333-wq
 #!homepage = https://github.com/wlj2333-wq/loon-adblock
 #!system = iOS,iPadOS
@@ -11,17 +11,24 @@
 splash = switch,true,type=boolean,tag=开屏广告,desc=清空开屏与补发接口中的广告列表
 banners = switch,true,type=boolean,tag=横幅和推广,desc=清理广告接口中的横幅与推广入口
 tracking = switch,true,type=boolean,tag=广告上报,desc=为本次抓包确认的广告曝光和点击接口返回空成功响应
+sdk_ads = switch,true,type=boolean,tag=广告SDK策略,desc=阻断酷狗客户端的统一广告策略请求，可能影响看广告领奖功能
 popups = switch,false,type=boolean,tag=促销弹窗,desc=可选清理运营弹窗与装扮促销弹窗，可能同时隐藏其他运营提示
 
 [Rewrite]
+# 抓包确认两种 SDK 域名；仅匹配酷狗 User-Agent，阻断广告策略请求。
+request if ${sdk_ads} == true && ${url} ~= /^https?:\/\/(?:mc|ad)\.tencentmusic\.com\/sdk\/ad\/strategies(?:\?|$)/ && ${request.header['User-Agent']} ~= /^kugou\//i then reject(503)
+
 # 开屏：保留服务端配置，仅清空已确认的广告列表。
 response if ${splash} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v4\/mobile_splash(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.boot_ads = [] | .data.front_ads = [] | .data.discard = [] else . end")
 
 # 开屏补发：least_ads 中也存在广告，必须与主开屏接口一起清理。
-response if ${splash} == true && ${url} ~= /^https?:\/\/adserviceretry\.kglink\.cn\/v4\/mobile_splash_sort(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.ads = [] | .data.retry_ads = [] | .data.least_ads = [] | .data.retry_id = [] | .data.exposure_csj_ids = [] | .data.exposure_tme_uni_ids = [] else . end")
+response if ${splash} == true && ${url} ~= /^https?:\/\/(?:adserviceretry\.kglink\.cn|ads\.service\.kugou\.com)\/v4\/mobile_splash_sort(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.ads = [] | .data.retry_ads = [] | .data.least_ads = [] | .data.retry_id = [] | .data.exposure_csj_ids = [] | .data.exposure_tme_uni_ids = [] else . end")
 
-# 会员页、我的页面横幅、我的页面广告链接、跨页面挂件。
-response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/(?:(?:adservice|ads\.service)\/v3\/vip_center|ads\.gateway\/v3\/mine_link|adp\/ad\/v1\/(?:mine_top_banner|multi_page_pendant))(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.ads | type) == \"array\" then .data.ads = [] else . end")
+# 会员页、我的页面、底部、侧栏与首页广告列表。
+response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/(?:(?:adservice|ads\.service)\/v3\/vip_center|ads\.gateway\/(?:v3\/(?:mine_link|mobile_down)|v2\/(?:sidebar_link|sidebar_top_card|home_card))|adp\/ad\/v1\/(?:mine_top_banner|multi_page_pendant))(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.ads | type) == \"array\" then .data.ads = [] else . end")
+
+# 首页组合接口只处理其中已存在的广告数组。
+response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/adp\/ad\/v1\/home_combine(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.home_city_rankings | type) == \"object\" and (.data.home_city_rankings.ads | type) == \"array\" then .data.home_city_rankings.ads = [] else . end")
 
 # 推广入口列表。
 response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v2\/mobile_link(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.info | type) == \"array\" then .data.info = [] else . end")
@@ -41,4 +48,4 @@ response if ${popups} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ate
 response if ${popups} == true && ${url} ~= /^https?:\/\/vipdress\.kugou\.com\/v1\/dress_sales\/get_popup_for_package(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.need_popup | type) == \"boolean\" then .data.need_popup = false else . end")
 
 [Mitm]
-hostname = gateway.kugou.com,adserviceretry.kglink.cn,fx.service.kugou.com,vipdress.kugou.com
+hostname = gateway.kugou.com,adserviceretry.kglink.cn,ads.service.kugou.com,fx.service.kugou.com,vipdress.kugou.com,mc.tencentmusic.com,ad.tencentmusic.com
