@@ -1,44 +1,22 @@
-#!name = 酷狗音乐去广告
-#!desc = 根据 clientver 20835 抓包制作，清理开屏、横幅、推广入口及广告上报。促销弹窗可选。需开启 MitM；实际效果需手机验证。
+#!name = 酷狗音乐去广告 v2.0.0
+#!desc = 兼容脚本版：开屏、补发、横幅和推广清理，拦截酷狗 SDK 广告策略。需启用脚本及 MitM；日志前缀 KuGouAdBlock 2.0.0。
 #!author = wlj2333-wq
 #!homepage = https://github.com/wlj2333-wq/loon-adblock
-#!system = iOS,iPadOS
-#!loon_version = 3.5.1(978)
 #!date = 2026-10-27
-#!tag = 去广告,酷狗音乐
 
-[Argument]
-splash = switch,true,type=boolean,tag=开屏广告,desc=清空开屏与补发接口中的广告列表
-banners = switch,true,type=boolean,tag=横幅和推广,desc=清理广告接口中的横幅与推广入口
-tracking = switch,true,type=boolean,tag=广告上报,desc=为本次抓包确认的广告曝光和点击接口返回空成功响应
-popups = switch,false,type=boolean,tag=促销弹窗,desc=可选清理运营弹窗与装扮促销弹窗，可能同时隐藏其他运营提示
+[Script]
+# 广告上报与直播广告专用接口，在请求阶段返回空成功响应。
+http-request ^https?:\/\/(?:gateway\.kugou\.com\/(?:ads\.gateway\/v3\/stat_(?:expose|click)|adp\/stat\/v1\/expose)|fx\.service\.kugou\.com\/mfx-kugoulive\/ad\/query_all)(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.v2.js,timeout=10,tag=酷狗v2广告请求,enable=true,argument="debug=1"
 
-[Rewrite]
-# 开屏：保留服务端配置，仅清空已确认的广告列表。
-response if ${splash} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v4\/mobile_splash(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.boot_ads = [] | .data.front_ads = [] | .data.discard = [] else . end")
+# 此 SDK 响应带加密标记，按 URL 和 User-Agent 识别后仅阻断酷狗的广告策略请求。
+http-request ^https?:\/\/mc\.tencentmusic\.com\/sdk\/ad\/strategies(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.v2.js,timeout=10,tag=酷狗v2广告SDK,enable=true,argument="debug=1"
 
-# 开屏补发：least_ads 中也存在广告，必须与主开屏接口一起清理。
-response if ${splash} == true && ${url} ~= /^https?:\/\/adserviceretry\.kglink\.cn\/v4\/mobile_splash_sort(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.ads = [] | .data.retry_ads = [] | .data.least_ads = [] | .data.retry_id = [] | .data.exposure_csj_ids = [] | .data.exposure_tme_uni_ids = [] else . end")
+# 处理已观察到的广告响应，保留广告列表以外的字段。
+http-response ^https?:\/\/gateway\.kugou\.com\/(?:ads\.gateway\/(?:v4\/mobile_splash|v3\/(?:mine_link|mobile_down)|v2\/(?:mobile_link|task_center_entrance|sidebar_link|sidebar_top_card|home_card))|(?:adservice|ads\.service)\/v3\/vip_center|adp\/ad\/v1\/(?:mine_top_banner|multi_page_pendant|home_combine))(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.v2.js,requires-body=true,timeout=10,tag=酷狗v2广告响应,enable=true,argument="debug=1"
+http-response ^https?:\/\/adserviceretry\.kglink\.cn\/v4\/mobile_splash_sort(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.v2.js,requires-body=true,timeout=10,tag=酷狗v2开屏补发,enable=true,argument="debug=1"
 
-# 会员页、我的页面横幅、我的页面广告链接、跨页面挂件。
-response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/(?:(?:adservice|ads\.service)\/v3\/vip_center|ads\.gateway\/v3\/mine_link|adp\/ad\/v1\/(?:mine_top_banner|multi_page_pendant))(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.ads | type) == \"array\" then .data.ads = [] else . end")
-
-# 推广入口列表。
-response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v2\/mobile_link(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.info | type) == \"array\" then .data.info = [] else . end")
-
-# 任务中心入口广告。
-response if ${banners} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v2\/task_center_entrance(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" then .data.mine_page_under_tab_banner_ads = [] | .data.ads = [] else . end")
-
-# 直播广告专用接口：返回与抓包相同类型的空列表。
-response if ${banners} == true && ${url} ~= /^https?:\/\/fx\.service\.kugou\.com\/mfx-kugoulive\/ad\/query_all(?:\?|$)/ then response.body.mock("json", `{"code":0,"data":[],"msg":"","times":0}`, 200)
-
-# 广告曝光与点击上报：Mock 在请求发往上游之前返回。
-response if ${tracking} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/ads\.gateway\/v3\/stat_(?:expose|click)(?:\?|$)/ then response.body.mock("json", `{"status":1,"error_code":0,"data":""}`, 200)
-response if ${tracking} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/adp\/stat\/v1\/expose(?:\?|$)/ then response.body.mock("json", `{"errcode":0,"errmsg":"","data":{},"status":1}`, 200)
-
-# 可选运营弹窗：此接口不是纯广告接口，因此默认关闭。
-response if ${popups} == true && ${url} ~= /^https?:\/\/gateway\.kugou\.com\/aterouter\/v2\/get_dialog(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.popup_list | type) == \"array\" then .data.popup_list = [] else . end")
-response if ${popups} == true && ${url} ~= /^https?:\/\/vipdress\.kugou\.com\/v1\/dress_sales\/get_popup_for_package(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if .status == 1 and (.data | type) == \"object\" and (.data.need_popup | type) == \"boolean\" then .data.need_popup = false else . end")
+# 可选运营弹窗，默认关闭；在 Loon 中启用此条脚本时可能同时隐藏运营提示。
+http-response ^https?:\/\/(?:gateway\.kugou\.com\/aterouter\/v2\/get_dialog|vipdress\.kugou\.com\/v1\/dress_sales\/get_popup_for_package)(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.v2.js,requires-body=true,timeout=10,tag=酷狗v2可选运营弹窗,enable=false,argument="popups=1&debug=1"
 
 [Mitm]
-hostname = gateway.kugou.com,adserviceretry.kglink.cn,fx.service.kugou.com,vipdress.kugou.com
+hostname = gateway.kugou.com,adserviceretry.kglink.cn,fx.service.kugou.com,mc.tencentmusic.com,vipdress.kugou.com
