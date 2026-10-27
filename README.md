@@ -1,85 +1,37 @@
-# Loon 去广告插件
+# 哔哩哔哩 Loon 去广告 v1.1.0
 
-| 插件 | 当前版本 | 覆盖范围 |
-| --- | --- | --- |
-| [酷狗音乐](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin) | 1.1.0 | 开屏、横幅、侧栏与广告 SDK 策略 |
-| [哔哩哔哩](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock.plugin) | 1.1.0（脚本版） | 开屏、整块首页轮播、会员购推广卡片与信息流广告 |
-| [雷神加速器](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Leigod-AdBlock.plugin) | 1.0.0 | 已抓到的横幅和促销位；尝试关闭 ToBid 开屏配置，效果待验证 |
+当前仓库只保留本版插件、其必需的脚本和此说明。此前酷狗、雷神及旧版文件已在清理前备份到本地，历史提交也保留。
 
-将对应链接添加到 **Loon → 插件**，开启复写、脚本与 MitM 并信任证书；插件自动引用所需 JS，无需另建脚本订阅。需要 Loon 3.5.1 (978) 或更新版本。每个 App 可独立启用；测试时避免同时启用该 App 的其他去广告插件。
+## 导入
 
-新增两款插件的接口范围、开关和验证限制见 [哔哩哔哩与雷神插件说明](MultiApp-AdBlock.md)。本仓库不包含原始 HAR、账户信息或私人配置。
-
----
-
-## 酷狗音乐 Loon 去广告 v1.1.0（复写版）
-
-当前订阅使用 Loon 原生 Rewrite，在第一版的基础上补充后续抓包发现的广告域名和接口。
-
-## 安装或更新
+将以下独立版本链接添加到 Loon「插件」，旧的同用途插件先停用：
 
 ```text
-https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin
+https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.1.plugin
 ```
 
-1. 在 Loon 插件页面更新这个订阅，名称应显示 **酷狗音乐去广告 v1.1.0（复写版）**。
-2. 开启 **复写（Rewrite）和 MitM**，安装并信任自己的 Loon MitM 证书。需要 Loon 3.5.1 (978) 或更新版本。
-3. 验证时只启用这一份酷狗去广告插件，完全退出酷狗、重新连接 Loon，再打开酷狗测试。
+名称应显示 **哔哩哔哩开屏和横幅去广告 v1.1.0（脚本版）**。开启 **脚本（Script）和 MitM** 并信任自己的 Loon MitM 证书。插件自动引用 `Bilibili-AdBlock.v1.1.js`，无需另建 JS 订阅。完全退出 B 站后重新打开测试。
 
-本版不需要单独导入 JS；执行信息在请求详情的复写记录中。看不到脚本执行日志是本版的预期行为。
+## 处理范围
 
-## 最新抓包证据
+- 开屏广告、品牌及活动启动画面。
+- 首页整块顶部轮播，包括其中的游戏推广和活动推荐。
+- 会员购推广卡片及已识别的信息流广告卡片。
+- 保留普通视频、直播和其他页面配置；不按普通视频标题或简介过滤。
+- 未处理 gRPC/Protobuf 广告。未屏蔽会员购和游戏落地页域名。
 
-用户提供的第三份酷狗 HAR 包含 526 条请求，其中 30 条带有第一版规则的复写记录和响应修改标记。已观察到：
+## 验证
 
-| 接口 | 抓包中的结果 |
-| --- | --- |
-| `gateway.kugou.com/ads.gateway/v4/mobile_splash` | 已命中复写，`boot_ads`、`front_ads`、`discard` 均为空 |
-| `gateway.kugou.com/adp/ad/v1/mine_top_banner` | 已命中复写，广告列表为空 |
-| `gateway.kugou.com/adservice/v3/vip_center` | 11 次请求均有复写记录，返回的广告列表为空 |
-| `gateway.kugou.com/aterouter/v2/get_dialog` | 已命中用户开启的可选弹窗规则，弹窗列表为空 |
-| `ads.service.kugou.com/v4/mobile_splash_sort` | 第一版未覆盖这个补发域名，`least_ads` 仍有 1 条 |
-| `gateway.kugou.com/ads.gateway/v3/mobile_down` | 第一版未覆盖，返回 2 条广告 |
-| `gateway.kugou.com/ads.gateway/v2/sidebar_link` | 第一版未覆盖，返回 14 条广告 |
-| `ad.tencentmusic.com/sdk/ad/strategies` | 第一版未覆盖的新 SDK 域名，响应带加密标记 |
+实际发布的 JS 已用两份 HAR 共 837 条请求检查匹配，并回放全部 13 个匹配响应。最新首页响应由 11 张卡片变为 8 张，删除一块轮播和两张会员购推广卡片，其余内容逐项保留。本地回放通过，手机效果仍需验证。
 
-这些记录确认第一版在此次测试中已执行。此前“所有规则没有执行记录”的现象与本次结果已经不同，不能再据旧抓包判断复写未启用。
+在 Loon「脚本」记录中查找日志前缀：
 
-## v1.1.0 补充内容
+```text
+[BilibiliAdBlock 1.1.0]
+```
 
-- 开屏补发同时覆盖 `adserviceretry.kglink.cn` 和 `ads.service.kugou.com`，处理 `/v4/mobile_splash_sort` 中的补发、兜底及相关列表。
-- 补充底部广告 `mobile_down`、侧栏 `sidebar_link`、`sidebar_top_card` 和首页 `home_card` 的广告列表清理。
-- 对 `/adp/ad/v1/home_combine` 中已存在的 `data.home_city_rankings.ads` 数组做清理。
-- 增加「广告SDK策略」开关：对 `mc.tencentmusic.com`、`ad.tencentmusic.com` 的 `/sdk/ad/strategies` 请求，仅当 User-Agent 以 `kugou/` 开头时在本地返回 503，阻断该广告策略请求。未改写共享主机的其他配置接口。
+日志包含路径、删除数和保留数，不包含查询参数或账号数据。有实际修改时，响应头包含 `X-Bilibili-AdBlock: 1.1.0`；无需修改时不添加此头。若没有任何本版脚本记录，需要继续检查插件及远程脚本是否加载，不能仅凭页面广告判断接口遗漏。
 
-SDK 广告策略响应是加密数据，因此使用请求拦截。此开关可能影响看广告领奖等依赖广告展示的功能，可单独关闭。
+Loon 按具体插件文件 URL 加载；多个插件文件位于同一仓库本身不会令其无法识别。这次更换独立版本文件名，用于排除旧订阅 URL 缓存等因素，并不代表已确认缓存是故障原因。
 
-## 插件开关
-
-| 开关 | 默认 | 作用 |
-| --- | --- | --- |
-| 开屏广告 | 开 | 清理开屏和开屏补发列表 |
-| 横幅和推广 | 开 | 清理已覆盖接口中的横幅、推广入口和广告数组 |
-| 广告上报 | 开 | 本地返回曝光、点击接口的空成功响应 |
-| 广告SDK策略 | 开 | 拦截酷狗客户端的统一广告策略请求 |
-| 促销弹窗 | 关 | 可选清理运营弹窗与装扮促销弹窗，可能同时隐藏其他运营提示 |
-
-## 如何验证
-
-- 在复写记录中确认对应请求命中本插件；开屏主接口和补发接口不一定出现在脚本记录列表里。
-- 开屏主接口的 `data.boot_ads`、`data.front_ads` 应为空。
-- 两个开屏补发域名的 `data.least_ads`、`data.retry_ads` 应为空。
-- 启用 SDK 开关后，符合酷狗 User-Agent 条件的广告策略请求应在本地返回 503，这是该条拦截规则的预期结果。
-- 缓存广告仍可能显示，需完全退出酷狗后重试，或使用酷狗提供的相关缓存清理功能。
-
-## 验证范围
-
-本地扫描了三份 HAR，共 **1,805 条请求**，检查正则编译、域名及路径边界、规则重叠、原有 JQ 表达式保留、内联 JSON、SDK User-Agent 条件及发布内容凭据扫描，均通过。累计识别并覆盖 8 个第一版未覆盖的域名与路径组合。
-
-第一版原有规则已有本次手机抓包的执行证据；**本版新增规则仍需更新后在手机上验证**。本地未运行 Loon 的原生 JQ 引擎，也没有把静态匹配检查当作手机实测。广告 SDK 的缓存、额外渠道和 App 后续更新可能导致广告残留。
-
-## 文档
-
-- [Loon Rewrite](https://nsloon.app/docs/Rewrite/rewrite_v2/)
-- [Loon 插件](https://nsloon.app/docs/Plugin/)
-- [Loon MitM](https://nsloon.app/docs/MitM/)
+仓库不含原始 HAR、令牌、账号信息或私人配置。
