@@ -1,54 +1,75 @@
-# 哔哩哔哩 Loon 去广告 v1.2.0（复写测试版）
+# Loon 去广告插件
 
-本版按用户要求改用纯原生 Rewrite，不引用 JS，也没有 Script 配置或插件参数依赖。当前仓库提供本版哔哩哔哩插件与已恢复的酷狗 v1.1.0 复写插件。之前的 JS 版已完整备份到本地，Git 历史也保留。
+- [哔哩哔哩 v1.3.0（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
+- [酷狗音乐 v1.1.0（复写版）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)
 
-## 导入与测试
+哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.0。首页与开屏仍使用原生复写，只为播放页新增二进制辅助脚本。酷狗文件保持原样。
 
-先停用旧的哔哩哔哩去广告插件，将以下独立版本链接添加到 Loon「插件」：
+## 哔哩哔哩安装
+
+在 Loon「插件」更新或添加上面的哔哩哔哩链接，开启 **复写（Rewrite）、脚本（Script）和 MitM**，安装并信任自己的 MitM 证书。需要 Loon Build 988+，用户当前 3.5.2 (1005) 满足声明的版本要求。插件自动加载 `Bilibili-PlayerAds.v1.3.js`，无需另建 JS 订阅。
+
+完全退出 B 站后重新打开测试；避免同时启用其他处理相同广告响应的插件。此前纯复写版已保存在本地备份，Git 历史保留。
+
+## 处理范围
+
+原生复写继续处理：
+
+- 开屏广告列表、展示计划、品牌及活动启动画面。
+- 首页整块顶部轮播、会员购推广和已识别的信息流广告卡片。
+- 竖屏流独立广告列表。
+
+辅助 JS 只匹配 `grpc.biliapi.net` 的三个方法：
+
+| 方法 | 处理 |
+| --- | --- |
+| `bilibili.app.viewunite.v1.View/View` | 删除确认含 B 站广告类型标记的 CM 容器；过滤已知相关推荐模块中的 CM 卡片 |
+| `bilibili.app.viewunite.v1.View/RelatesFeed` | 过滤明确带 CM 类型和广告载荷的推荐卡片，保留普通推荐与分页 |
+| `bilibili.app.viewunite.v1.View/PlayPause` | 仅在字段 3 含已确认的广告类型标记时，清理捕获样本中的暂停广告、提示内容及启用标志 |
+
+脚本解析 gRPC 帧并用 Loon 内置 gzip API 解压和重新压缩，再按 Protobuf 字段边界清理广告；不对二进制内容做文本替换。不重新编码无关字段，保留未处理的原始字段字节及未知字段。错误状态、截断数据、不支持的压缩或结构会原样放行。
+
+没有匹配视频播放地址接口 `Player/PlayViewUnite`、弹幕接口或整个 gRPC 域名。没有加入额外联网、持久存储或账号日志。该版本不保证覆盖其他业务接口、缓存广告和未来变更的数据结构。
+
+## 最新抓包与验证证据
+
+最新 HAR 含 483 条请求，出现 6 条原生复写记录；其中 5 个完整响应记录了 Body 复写。后续开屏、品牌画面、活动列表及首页已出现清理结果；另一次开屏请求中途被客户端关闭，不能当作完成清理的证据。因此原生复写已执行，新增播放页广告属于不同的数据接口。
+
+对发布的实际二进制 JS 使用 Node VM 回放三份 HAR，共扫描 **1,320 条请求**，匹配 10 个响应，其中 6 个发生修改。Node 使用 gzip 接口替身模拟 Loon 工具 API，**不是手机实测**。
+
+最新一份中的处理结果：
+
+- 两个 `View` 响应各删除一个广告容器，其中一个同时删除 1 张广告推荐卡片。
+- 两个 `RelatesFeed` 响应各删除 2 张广告卡片；其余三次不含广告的分页响应保持不变。
+- 一个 `PlayPause` 响应清理了暂停广告内容和提示。
+- 普通推荐卡片、分页、合集、标题、UP 主和其他模块、账号状态及未处理字段均通过原始字节保留检查。
+- gzip 和未压缩帧、未知 64 位数值、异常输入、错误状态、网址边界与单次完成回调检查通过。
+
+暂停响应的 1/2/3 字段处理来自本次抓包结构和广告类型标记，仍需手机验证实际展示行为。未把静态检查或本地回放描述为设备实测。
+
+## 如何验证
+
+首页与开屏查看「复写记录」，匹配响应头标记为 `X-Bilibili-AdBlock: 1.3.0-hybrid`。该 Header 只确认相应 Action 执行，仍应结合返回数据判断清理效果。
+
+播放页在「脚本」记录中查看日志：
 
 ```text
-https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin
+[BilibiliPlayerAds 1.3.0] View cm-containers=1 ad-cards=1 pause-blocks=0 changed=true
+[BilibiliPlayerAds 1.3.0] RelatesFeed cm-containers=0 ad-cards=2 pause-blocks=0 changed=true
+[BilibiliPlayerAds 1.3.0] PlayPause cm-containers=0 ad-cards=0 pause-blocks=1 changed=true
 ```
 
-确认名称为 **哔哩哔哩开屏和横幅去广告 v1.2.0（复写测试版）**。开启 **复写（Rewrite）和 MitM**，安装并信任自己的 Loon MitM 证书。本插件无需脚本总开关或另建 JS 订阅；其他插件是否需要脚本，请按各自配置保留。
+这些是回放日志示例；计数随新请求变化。实际修改的响应添加 `X-Bilibili-Player-AdBlock: 1.3.0`。无广告时 `changed=false` 为正常结果。若仍有广告，请提供对应方法的脚本日志及覆盖本次展示的抓包。
 
-原生新复写语法要求 Loon 3.5.1 (978) 或更新版本。完全退出 B 站后重新打开测试；同一响应暂时只用这一份去广告插件处理。
+## 酷狗音乐
 
-## 清理范围
+酷狗恢复版本为 v1.1.0 原生复写版，开启复写和 MitM。此次没有修改酷狗规则。
 
-- 开屏列表、展示计划、缓存 ID。
-- 品牌及活动启动画面，也会隐藏相应品牌启动画面。
-- 整块首页顶部轮播，包括游戏推广与活动推荐。
-- 会员购推广卡片、已识别的信息流广告及竖屏流独立广告列表。
-- 保留普通视频、直播、账号信息和其他页面配置；不按普通视频标题或简介过滤。
-- 没有屏蔽会员购或游戏落地页域名，也没有处理 gRPC/Protobuf 广告。
+## 参考
 
-## 如何确认执行
+- [Loon Rewrite](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+- [Loon Script API：二进制响应及 gzip](https://nsloon.app/docs/Script/script_api/)
+- [社区整理的 View/RelatesFeed Protobuf 定义](https://github.com/bilibili-plugins/bilibili-api-collect/blob/master/grpc_api/bilibili/app/viewunite/v1/viewunite.proto)
+- [社区整理的广告卡片和模块定义](https://github.com/bilibili-plugins/bilibili-api-collect/blob/master/grpc_api/bilibili/app/viewunite/common.proto)
 
-本版不产生 JS 脚本日志。请查看请求详情中的 **复写记录**，或检查响应头：
-
-```text
-X-Bilibili-AdBlock: 1.2.0-rewrite
-```
-
-该响应头用于确认 URL、状态条件命中及 Header Action 执行，**不能单独证明前面的 JQ 清理成功**。需要结合复写错误记录和响应 JSON 判断：
-
-- `/x/v2/splash/list`、`/show` 的对应广告与展示数组应为空。
-- 首页 `/x/v2/feed/index` 的 `data.items` 中应没有轮播与广告卡片，普通视频及直播仍存在。
-- 此前 430 条请求 HAR 的首页样本有 11 张卡片，按当前规则应保留 8 张；新请求的数量可能不同。
-
-若没有版本响应头，优先核对插件版本和复写命中；若有版本头但广告仍在，请提供该请求的复写详情及返回 JSON，区分执行错误、缓存和新数据结构。
-
-## 验证范围
-
-5 条规则已检查两份 HAR 共 837 条请求，覆盖其中 13 个请求；URL 边界、规则重叠、响应结构、JQ 配置字符串和括号配对、发布文件凭据扫描均通过。
-
-**本地没有执行 Loon 原生 JQ，也未验证手机展示效果。** 这些静态检查不能替代设备测试。此前 JS 版的回放结果不当作本版原生复写的运行证据。
-
-仓库不含原始 HAR、账户信息、令牌或私人配置。
-
-[Loon 原生 Rewrite 文档](https://nsloon.app/docs/Rewrite/rewrite_v2/)
-
-## 已恢复：酷狗音乐 v1.1.0（复写版）
-
-[原订阅链接](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)已按清理前的本地备份原样恢复。开启复写与 MitM；该文件不引用 JS，可与哔哩哔哩插件同时启用。
+社区定义用于字段含义核对；实际字节结构另与用户 HAR 验证。仓库不包含原始 HAR、令牌、账号数据或私人配置。
