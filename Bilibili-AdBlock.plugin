@@ -1,31 +1,17 @@
-#!name = 哔哩哔哩开屏和横幅去广告 v1.0.0
-#!desc = 基于本次 iOS 抓包清理开屏、首页横幅及信息流广告卡片。需开启复写和 MitM；不处理 gRPC 广告。
+#!name = 哔哩哔哩开屏和横幅去广告 v1.1.0（脚本版）
+#!desc = 清理开屏、首页整块轮播、会员购推广卡片及信息流广告。需启用脚本和 MitM；日志前缀 BilibiliAdBlock 1.1.0。
 #!author = wlj2333-wq
 #!homepage = https://github.com/wlj2333-wq/loon-adblock
 #!system = iOS,iPadOS
-#!loon_version = 3.5.1(978)
 #!date = 2026-10-27
-#!tag = 去广告
+#!tag = 去广告,哔哩哔哩
 
-[Argument]
-splash = switch,true,type=boolean,tag=开屏广告,desc=清空广告开屏与活动和品牌启动画面
-banners = switch,true,type=boolean,tag=横幅和信息流广告,desc=移除首页横幅与广告卡片并保留普通视频和直播
+[Script]
+# 开屏、品牌启动画面与活动启动画面；保留广告列表以外的数据。
+http-response ^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/(?:list|show|brand\/list|event\/list2)(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock.v1.1.js,requires-body=true,binary-body-mode=false,timeout=10,tag=B站v1.1开屏,enable=true
 
-[Rewrite]
-# 开屏广告及展示计划；仅清空响应中已有的数组。
-response if ${splash} == true && ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/(?:list|show)(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if type != \"object\" then . elif .code == 0 and (.data | type) == \"object\" then reduce [\"list\", \"show\", \"keep_ids\"][] as $k (. ; if (.data[$k] | type) == \"array\" then .data[$k] = [] else . end) else . end")
-
-# 品牌启动画面及预加载；关闭强制展示。
-response if ${splash} == true && ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/brand\/list(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if type != \"object\" then . elif .code == 0 and (.data | type) == \"object\" then (reduce [\"list\",\"preload\"][] as $k (. ; if (.data[$k] | type) == \"array\" then .data[$k] = [] else . end)) | .data.forcibly = false | .data.force_show_times = 0 else . end")
-
-# 活动开屏；保留账号等其他字段。
-response if ${splash} == true && ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/event\/list2(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if type != \"object\" then . elif .code == 0 and (.data | type) == \"object\" then reduce [\"event_list\"][] as $k (. ; if (.data[$k] | type) == \"array\" then .data[$k] = [] else . end) else . end")
-
-# 首页和竖屏流：过滤广告卡片与横幅，保留普通视频、直播及配置。
-response if ${banners} == true && ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index(?:\/story)?(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if type != \"object\" then . elif .code == 0 and (.data | type) == \"object\" then if (.data.items | type) == \"array\" then .data.items |= map(select(if type == \"object\" then (((.ad_info | type) == \"object\") or ((.card_type // \"\") | test(\"^(cm_|banner)\")) or (.card_goto == \"banner\")) | not else true end)) else . end else . end")
-
-# 竖屏流独立广告列表。
-response if ${banners} == true && ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\/cart(?:\?|$)/ && ${response.status} == 200 then response.json.jq("if type != \"object\" then . elif .code == 0 and (.data | type) == \"object\" then reduce [\"ads\"][] as $k (. ; if (.data[$k] | type) == \"array\" then .data[$k] = [] else . end) else . end")
+# 移除整块顶部轮播和广告推广卡片，保留普通视频与直播。
+http-response ^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index(?:\/story(?:\/cart)?)?(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock.v1.1.js,requires-body=true,binary-body-mode=false,timeout=10,tag=B站v1.1首页轮播和广告卡片,enable=true
 
 [Mitm]
 hostname = app.bilibili.com
