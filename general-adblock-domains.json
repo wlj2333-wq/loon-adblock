@@ -1,0 +1,1465 @@
+{
+  "name": "General-AdBlock",
+  "version": "1.0.0",
+  "date": "2026-10-29",
+  "license": "GPL-3.0-only",
+  "platform_groups": 27,
+  "rule_count": 100,
+  "sources": {
+    "geosite-tencent": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/tencent",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "5194474e67678feb1361dd7a07418a64ebf3c3b5",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/tencent"
+    },
+    "geosite-baidu": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/baidu",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "99dbc2625604e08c24bcd2aef110352699a98baf",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu"
+    },
+    "geosite-bytedance": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/bytedance",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "7714257a76743d6603edf73fcb2b48bc98db9865",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance"
+    },
+    "geosite-kuaishou": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/kuaishou",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "c792639e1e26046cfa025b420d18bab152d5d611",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/kuaishou"
+    },
+    "geosite-google": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/google",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "e4e550b506d510bcc3087c6a7476783e34e37b49",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google"
+    },
+    "geosite-amazon": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/amazon",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "5cba8453f287743232d4c7b2c109b127028043d3",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/amazon"
+    },
+    "geosite-facebook": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/facebook",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "5543283102d256c62801e9aeefab9f8028346ffa",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/facebook"
+    },
+    "geosite-microsoft": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/microsoft",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "454047af6d5330e22cb2761a39aa9791b7dee554",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/microsoft"
+    },
+    "geosite-unity": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/unity",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "7f24420de688f9e979ef65a1528d7b8349885e5a",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/unity"
+    },
+    "geosite-supersonic": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/supersonic",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "d9798ec58228d72372ecfdcf31c20c3e1bf46d42",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/supersonic"
+    },
+    "geosite-yandex": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/yandex",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "50b5e921a4a1ed76dc5b0a55f8d63b3de01f568c",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex"
+    },
+    "geosite-taboola": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/taboola",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "d56de7ed041d010461b46a1b4e2ddcef0a5b28c2",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/taboola"
+    },
+    "geosite-ads": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/category-ads",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "8d2584b7242c2e7b15389bf601da2827087275de",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads"
+    },
+    "geosite-ads-all": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/category-ads-all",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "bcd1779c6420ae8e68cfce7903df306436a5fe8b",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads-all"
+    },
+    "geosite-openx": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/openx",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "47aea919ea3e4b947912cdd3f0bc5c404e40d3cb",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx"
+    },
+    "geosite-pubmatic": {
+      "repository": "v2fly/domain-list-community",
+      "path": "data/pubmatic",
+      "ref": "333d8a1810d04600bcb00870155a369954ed37f5",
+      "blob_sha": "c3846d035fc2f12bab491f495d53fcee73e44a26",
+      "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/pubmatic"
+    },
+    "adguard-mobile": {
+      "repository": "AdguardTeam/AdguardFilters",
+      "path": "MobileFilter/sections/adservers.txt",
+      "ref": "e224dbe933b8bf91e90970e53d04e7068ab153f3",
+      "blob_sha": "7c5e804e87d42f60f82f738fb7791581fa6d5f16",
+      "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt"
+    },
+    "official-tanx": {
+      "url": "https://tanx.com/",
+      "secondary_url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_ali_mama_division/suit_bu1_ali_mama_division202202171548_47251.html",
+      "kind": "official-platform"
+    },
+    "official-tradedesk": {
+      "url": "https://www.thetradedesk.com/assets/general/Unified-ID-Adoption-Guidelines-for-DMPs-v1.0.pdf",
+      "kind": "official-domain-ownership"
+    }
+  },
+  "groups": [
+    {
+      "id": "tanx",
+      "name": "阿里妈妈 TANX",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "tanx.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "official-tanx",
+          "evidence": {
+            "source": "official-tanx",
+            "url": "https://tanx.com/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tencent",
+      "name": "腾讯广告／优量汇",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "gdt.qq.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-tencent",
+          "evidence": {
+            "source": "geosite-tencent",
+            "line": 131,
+            "source_text": "gdt.qq.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/tencent#L131"
+          }
+        },
+        {
+          "domain": "gdtimg.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-tencent",
+          "evidence": {
+            "source": "geosite-tencent",
+            "line": 132,
+            "source_text": "gdtimg.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/tencent#L132"
+          }
+        },
+        {
+          "domain": "ugdtimg.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-tencent",
+          "evidence": {
+            "source": "geosite-tencent",
+            "line": 153,
+            "source_text": "ugdtimg.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/tencent#L153"
+          }
+        },
+        {
+          "domain": "pgdt.gtimg.cn",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-tencent",
+          "evidence": {
+            "source": "geosite-tencent",
+            "line": 141,
+            "source_text": "pgdt.gtimg.cn @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/tencent#L141"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pangle",
+      "name": "穿山甲／Pangle",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "pangolin-sdk-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 411,
+            "source_text": "pangolin-sdk-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L411"
+          }
+        },
+        {
+          "domain": "pangolin-sdk-toutiao-b.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 410,
+            "source_text": "pangolin-sdk-toutiao-b.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L410"
+          }
+        },
+        {
+          "domain": "pangolin-sdk-toutiao1.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 412,
+            "source_text": "pangolin-sdk-toutiao1.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L412"
+          }
+        },
+        {
+          "domain": "pangolin-dsp-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 406,
+            "source_text": "pangolin-dsp-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L406"
+          }
+        },
+        {
+          "domain": "pangolin-dsp-toutiao-b.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 405,
+            "source_text": "pangolin-dsp-toutiao-b.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L405"
+          }
+        },
+        {
+          "domain": "panplayable-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 415,
+            "source_text": "panplayable-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L415"
+          }
+        },
+        {
+          "domain": "panplayable-toutiao-b.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 414,
+            "source_text": "panplayable-toutiao-b.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L414"
+          }
+        },
+        {
+          "domain": "pglstatp-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 419,
+            "source_text": "pglstatp-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L419"
+          }
+        },
+        {
+          "domain": "pglstatp-toutiao-b.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 418,
+            "source_text": "pglstatp-toutiao-b.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L418"
+          }
+        },
+        {
+          "domain": "pglstatp-sdk-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 416,
+            "source_text": "pglstatp-sdk-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L416"
+          }
+        },
+        {
+          "domain": "pglstatp-snssdk-toutiao.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 417,
+            "source_text": "pglstatp-snssdk-toutiao.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L417"
+          }
+        },
+        {
+          "domain": "pangolin.snssdk.com",
+          "type": "DOMAIN",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 413,
+            "source_text": "pangolin.snssdk.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L413"
+          }
+        },
+        {
+          "domain": "pangolin-hl.snssdk.com",
+          "type": "DOMAIN",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 407,
+            "source_text": "pangolin-hl.snssdk.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L407"
+          }
+        },
+        {
+          "domain": "pangolin-lf.snssdk.com",
+          "type": "DOMAIN",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 408,
+            "source_text": "pangolin-lf.snssdk.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L408"
+          }
+        },
+        {
+          "domain": "pangolin-lq.snssdk.com",
+          "type": "DOMAIN",
+          "source": "geosite-bytedance",
+          "evidence": {
+            "source": "geosite-bytedance",
+            "line": 409,
+            "source_text": "pangolin-lq.snssdk.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/bytedance#L409"
+          }
+        },
+        {
+          "domain": "pangle.io",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 534,
+            "source_text": "||pangle.io^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L534"
+          }
+        }
+      ]
+    },
+    {
+      "id": "baidu",
+      "name": "百度联盟／百青藤",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "mobads.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 121,
+            "source_text": "mobads.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L121"
+          }
+        },
+        {
+          "domain": "mobads-logs.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 122,
+            "source_text": "mobads-logs.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L122"
+          }
+        },
+        {
+          "domain": "cpro.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 98,
+            "source_text": "cpro.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L98"
+          }
+        },
+        {
+          "domain": "cpro.baidustatic.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 99,
+            "source_text": "cpro.baidustatic.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L99"
+          }
+        },
+        {
+          "domain": "pos.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 128,
+            "source_text": "pos.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L128"
+          }
+        },
+        {
+          "domain": "adscdn.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 89,
+            "source_text": "adscdn.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L89"
+          }
+        },
+        {
+          "domain": "afd.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 91,
+            "source_text": "afd.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L91"
+          }
+        },
+        {
+          "domain": "afdconf.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 92,
+            "source_text": "afdconf.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L92"
+          }
+        },
+        {
+          "domain": "cbjs.baidu.com",
+          "type": "DOMAIN",
+          "source": "geosite-baidu",
+          "evidence": {
+            "source": "geosite-baidu",
+            "line": 96,
+            "source_text": "cbjs.baidu.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/baidu#L96"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kuaishou",
+      "name": "快手广告／磁力引擎",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "adkwai.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-kuaishou",
+          "evidence": {
+            "source": "geosite-kuaishou",
+            "line": 31,
+            "source_text": "adkwai.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/kuaishou#L31"
+          }
+        },
+        {
+          "domain": "adukwai.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-kuaishou",
+          "evidence": {
+            "source": "geosite-kuaishou",
+            "line": 32,
+            "source_text": "adukwai.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/kuaishou#L32"
+          }
+        },
+        {
+          "domain": "adbkwai.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-kuaishou",
+          "evidence": {
+            "source": "geosite-kuaishou",
+            "line": 30,
+            "source_text": "adbkwai.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/kuaishou#L30"
+          }
+        },
+        {
+          "domain": "open.e.kuaishou.cn",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 381,
+            "source_text": "||open.e.kuaishou.cn^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L381"
+          }
+        },
+        {
+          "domain": "open.e.kuaishou.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 382,
+            "source_text": "||open.e.kuaishou.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L382"
+          }
+        },
+        {
+          "domain": "open.kuaishouzt.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 383,
+            "source_text": "||open.kuaishouzt.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L383"
+          }
+        },
+        {
+          "domain": "open.kwaizt.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 384,
+            "source_text": "||open.kwaizt.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L384"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mintegral",
+      "name": "Mintegral",
+      "region": "国内/出海",
+      "note": "整域也包含其官网和开发者平台；未扩展到 Mobvista 其他业务域名。",
+      "entries": [
+        {
+          "domain": "mintegral.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 471,
+            "source_text": "||mintegral.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L471"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sigmob",
+      "name": "Sigmob",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "sigmob.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads-all",
+          "evidence": {
+            "source": "geosite-ads-all",
+            "line": 34,
+            "source_text": "sigmob.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads-all#L34"
+          }
+        },
+        {
+          "domain": "sigmob.cn",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads-all",
+          "evidence": {
+            "source": "geosite-ads-all",
+            "line": 33,
+            "source_text": "sigmob.cn @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads-all#L33"
+          }
+        }
+      ]
+    },
+    {
+      "id": "beizi",
+      "name": "倍孜／AdScope",
+      "region": "国内/出海",
+      "note": "",
+      "entries": [
+        {
+          "domain": "beizi.biz",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads",
+          "evidence": {
+            "source": "geosite-ads",
+            "line": 138,
+            "source_text": "beizi.biz",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads#L138"
+          }
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "name": "Google Ads／AdMob／DoubleClick",
+      "region": "海外",
+      "note": "不屏蔽 google.com、googleapis.com、gstatic.com 整域；广告跳转链接可能受影响。",
+      "entries": [
+        {
+          "domain": "doubleclick.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 564,
+            "source_text": "doubleclick.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L564"
+          }
+        },
+        {
+          "domain": "doubleclick.cn",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 562,
+            "source_text": "doubleclick.cn @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L562"
+          }
+        },
+        {
+          "domain": "doubleclick.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 563,
+            "source_text": "doubleclick.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L563"
+          }
+        },
+        {
+          "domain": "doubleclick-cn.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 561,
+            "source_text": "doubleclick-cn.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L561"
+          }
+        },
+        {
+          "domain": "googlesyndication.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 579,
+            "source_text": "googlesyndication.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L579"
+          }
+        },
+        {
+          "domain": "googlesyndication-cn.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 578,
+            "source_text": "googlesyndication-cn.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L578"
+          }
+        },
+        {
+          "domain": "googleadservices.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 573,
+            "source_text": "googleadservices.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L573"
+          }
+        },
+        {
+          "domain": "googleadservices-cn.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 572,
+            "source_text": "googleadservices-cn.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L572"
+          }
+        },
+        {
+          "domain": "googletagservices.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 583,
+            "source_text": "googletagservices.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L583"
+          }
+        },
+        {
+          "domain": "googletagservices-cn.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 582,
+            "source_text": "googletagservices-cn.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L582"
+          }
+        },
+        {
+          "domain": "2mdn.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 542,
+            "source_text": "2mdn.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L542"
+          }
+        },
+        {
+          "domain": "2mdn-cn.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 541,
+            "source_text": "2mdn-cn.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L541"
+          }
+        },
+        {
+          "domain": "adservice.google.com",
+          "type": "DOMAIN",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 548,
+            "source_text": "adservice.google.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L548"
+          }
+        },
+        {
+          "domain": "mobileads.google.com",
+          "type": "DOMAIN",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 588,
+            "source_text": "mobileads.google.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L588"
+          }
+        },
+        {
+          "domain": "pagead.l.google.com",
+          "type": "DOMAIN",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 590,
+            "source_text": "pagead.l.google.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L590"
+          }
+        },
+        {
+          "domain": "partnerad.l.google.com",
+          "type": "DOMAIN",
+          "source": "geosite-google",
+          "evidence": {
+            "source": "geosite-google",
+            "line": 591,
+            "source_text": "partnerad.l.google.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/google#L591"
+          }
+        }
+      ]
+    },
+    {
+      "id": "applovin",
+      "name": "AppLovin",
+      "region": "海外",
+      "note": "applovin.com 整域也包含平台官网。",
+      "entries": [
+        {
+          "domain": "applovin.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads",
+          "evidence": {
+            "source": "geosite-ads",
+            "line": 145,
+            "source_text": "applovin.com",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads#L145"
+          }
+        },
+        {
+          "domain": "applvn.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads",
+          "evidence": {
+            "source": "geosite-ads",
+            "line": 146,
+            "source_text": "applvn.com",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads#L146"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unity",
+      "name": "Unity Ads",
+      "region": "海外",
+      "note": "不屏蔽 unity.com、unity3d.com 整域及其开发工具、非广告云服务。",
+      "entries": [
+        {
+          "domain": "unityads.unity3d.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-unity",
+          "evidence": {
+            "source": "geosite-unity",
+            "line": 13,
+            "source_text": "unityads.unity3d.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/unity#L13"
+          }
+        },
+        {
+          "domain": "iads.unity3d.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-unity",
+          "evidence": {
+            "source": "geosite-unity",
+            "line": 10,
+            "source_text": "iads.unity3d.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/unity#L10"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ironsource",
+      "name": "ironSource／LevelPlay",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "supersonicads.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-supersonic",
+          "evidence": {
+            "source": "geosite-supersonic",
+            "line": 3,
+            "source_text": "supersonicads.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/supersonic#L3"
+          }
+        },
+        {
+          "domain": "ssacdn.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-supersonic",
+          "evidence": {
+            "source": "geosite-supersonic",
+            "line": 1,
+            "source_text": "ssacdn.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/supersonic#L1"
+          }
+        },
+        {
+          "domain": "supersonicads-a.akamaihd.net",
+          "type": "DOMAIN",
+          "source": "geosite-supersonic",
+          "evidence": {
+            "source": "geosite-supersonic",
+            "line": 5,
+            "source_text": "supersonicads-a.akamaihd.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/supersonic#L5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vungle",
+      "name": "Liftoff Monetize／Vungle",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "vungle.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 1046,
+            "source_text": "||vungle.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L1046"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inmobi",
+      "name": "InMobi",
+      "region": "海外",
+      "note": "不屏蔽 inmobi.com 整域、Glance 和 inmobicdn.net 共享内容域。",
+      "entries": [
+        {
+          "domain": "ads.inmobi.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 917,
+            "source_text": "||ads.inmobi.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L917"
+          }
+        },
+        {
+          "domain": "appgw.inmobi.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 171,
+            "source_text": "||appgw.inmobi.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L171"
+          }
+        },
+        {
+          "domain": "config.inmobi.com",
+          "type": "DOMAIN",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 918,
+            "source_text": "||config.inmobi.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L918"
+          }
+        },
+        {
+          "domain": "inmobi.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 920,
+            "source_text": "||inmobi.net^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L920"
+          }
+        },
+        {
+          "domain": "inmobi.cn",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 921,
+            "source_text": "||inmobi.cn^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L921"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chartboost",
+      "name": "Chartboost",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "chartboost.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 867,
+            "source_text": "||chartboost.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L867"
+          }
+        },
+        {
+          "domain": "chartboosts.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 659,
+            "source_text": "||chartboosts.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L659"
+          }
+        }
+      ]
+    },
+    {
+      "id": "digitalturbine",
+      "name": "AdColony／Fyber 广告网络",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "adcolony.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 763,
+            "source_text": "||adcolony.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L763"
+          }
+        },
+        {
+          "domain": "fyber.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 897,
+            "source_text": "||fyber.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L897"
+          }
+        },
+        {
+          "domain": "inner-active.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 924,
+            "source_text": "||inner-active.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L924"
+          }
+        },
+        {
+          "domain": "inner-active.mobi",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads",
+          "evidence": {
+            "source": "geosite-ads",
+            "line": 105,
+            "source_text": "inner-active.mobi",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads#L105"
+          }
+        }
+      ]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon Ads",
+      "region": "海外",
+      "note": "不屏蔽 amazon.com 和 AWS 共享域名。",
+      "entries": [
+        {
+          "domain": "amazon-adsystem.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-amazon",
+          "evidence": {
+            "source": "geosite-amazon",
+            "line": 139,
+            "source_text": "amazon-adsystem.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/amazon#L139"
+          }
+        },
+        {
+          "domain": "serving-sys.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-amazon",
+          "evidence": {
+            "source": "geosite-amazon",
+            "line": 140,
+            "source_text": "serving-sys.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/amazon#L140"
+          }
+        }
+      ]
+    },
+    {
+      "id": "meta",
+      "name": "Meta 广告域名（有限覆盖）",
+      "region": "海外",
+      "note": "仅收录确认的独立广告域；不屏蔽 Facebook／Instagram 主站，不能靠本条清除其全部信息流广告。",
+      "entries": [
+        {
+          "domain": "facebookads.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-facebook",
+          "evidence": {
+            "source": "geosite-facebook",
+            "line": 401,
+            "source_text": "facebookads.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/facebook#L401"
+          }
+        }
+      ]
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft 广告域名（有限覆盖）",
+      "region": "海外",
+      "note": "不屏蔽 Bing、Microsoft 主站及登录域名；不保证清除其主站信息流广告。",
+      "entries": [
+        {
+          "domain": "microsoftads.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-microsoft",
+          "evidence": {
+            "source": "geosite-microsoft",
+            "line": 319,
+            "source_text": "microsoftads.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/microsoft#L319"
+          }
+        },
+        {
+          "domain": "msads.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-microsoft",
+          "evidence": {
+            "source": "geosite-microsoft",
+            "line": 320,
+            "source_text": "msads.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/microsoft#L320"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xandr",
+      "name": "Xandr／AppNexus",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "adnxs.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads-all",
+          "evidence": {
+            "source": "geosite-ads-all",
+            "line": 22,
+            "source_text": "adnxs.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads-all#L22"
+          }
+        }
+      ]
+    },
+    {
+      "id": "criteo",
+      "name": "Criteo",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "criteo.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 98,
+            "source_text": "||criteo.com^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L98"
+          }
+        },
+        {
+          "domain": "criteo.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "adguard-mobile",
+          "evidence": {
+            "source": "adguard-mobile",
+            "line": 99,
+            "source_text": "||criteo.net^",
+            "url": "https://github.com/AdguardTeam/AdguardFilters/blob/e224dbe933b8bf91e90970e53d04e7068ab153f3/MobileFilter/sections/adservers.txt#L99"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pubmatic",
+      "name": "PubMatic",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "pubmatic.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-pubmatic",
+          "evidence": {
+            "source": "geosite-pubmatic",
+            "line": 3,
+            "source_text": "pubmatic.com",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/pubmatic#L3"
+          }
+        },
+        {
+          "domain": "pubmatic.co.jp",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-pubmatic",
+          "evidence": {
+            "source": "geosite-pubmatic",
+            "line": 4,
+            "source_text": "pubmatic.co.jp",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/pubmatic#L4"
+          }
+        }
+      ]
+    },
+    {
+      "id": "openx",
+      "name": "OpenX",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "openx.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-openx",
+          "evidence": {
+            "source": "geosite-openx",
+            "line": 1,
+            "source_text": "openx.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx#L1"
+          }
+        },
+        {
+          "domain": "openxadexchange.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-openx",
+          "evidence": {
+            "source": "geosite-openx",
+            "line": 2,
+            "source_text": "openxadexchange.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx#L2"
+          }
+        },
+        {
+          "domain": "openxcdn.net",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-openx",
+          "evidence": {
+            "source": "geosite-openx",
+            "line": 3,
+            "source_text": "openxcdn.net @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx#L3"
+          }
+        },
+        {
+          "domain": "openxenterprise.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-openx",
+          "evidence": {
+            "source": "geosite-openx",
+            "line": 4,
+            "source_text": "openxenterprise.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx#L4"
+          }
+        },
+        {
+          "domain": "openxmarket.asia",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-openx",
+          "evidence": {
+            "source": "geosite-openx",
+            "line": 5,
+            "source_text": "openxmarket.asia @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/openx#L5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "index",
+      "name": "Index Exchange／Casale",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "casalemedia.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-ads-all",
+          "evidence": {
+            "source": "geosite-ads-all",
+            "line": 25,
+            "source_text": "casalemedia.com @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/category-ads-all#L25"
+          }
+        }
+      ]
+    },
+    {
+      "id": "taboola",
+      "name": "Taboola",
+      "region": "海外",
+      "note": "其官网和投放共用域名，整域规则也会阻止访问 Taboola 官网。",
+      "entries": [
+        {
+          "domain": "taboola.com",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-taboola",
+          "evidence": {
+            "source": "geosite-taboola",
+            "line": 4,
+            "source_text": "taboola.com",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/taboola#L4"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tradedesk",
+      "name": "The Trade Desk",
+      "region": "海外",
+      "note": "",
+      "entries": [
+        {
+          "domain": "adsrvr.org",
+          "type": "DOMAIN-SUFFIX",
+          "source": "official-tradedesk",
+          "evidence": {
+            "source": "official-tradedesk",
+            "url": "https://www.thetradedesk.com/assets/general/Unified-ID-Adoption-Guidelines-for-DMPs-v1.0.pdf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "yandex",
+      "name": "Yandex Ads／AdFox",
+      "region": "海外",
+      "note": "不屏蔽 yandex.ru 整域，也未纳入 AppMetrica、Metrika 等通用统计服务。",
+      "entries": [
+        {
+          "domain": "adfox.ru",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 120,
+            "source_text": "adfox.ru @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L120"
+          }
+        },
+        {
+          "domain": "adfox.yandex.ru",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 121,
+            "source_text": "adfox.yandex.ru @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L121"
+          }
+        },
+        {
+          "domain": "an.yandex.ru",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 127,
+            "source_text": "an.yandex.ru @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L127"
+          }
+        },
+        {
+          "domain": "bs.yandex.ru",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 132,
+            "source_text": "bs.yandex.ru @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L132"
+          }
+        },
+        {
+          "domain": "adsdk.yandex.ru",
+          "type": "DOMAIN",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 150,
+            "source_text": "full:adsdk.yandex.ru @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L150"
+          }
+        },
+        {
+          "domain": "yads.tech",
+          "type": "DOMAIN-SUFFIX",
+          "source": "geosite-yandex",
+          "evidence": {
+            "source": "geosite-yandex",
+            "line": 143,
+            "source_text": "yads.tech @ads",
+            "url": "https://github.com/v2fly/domain-list-community/blob/333d8a1810d04600bcb00870155a369954ed37f5/data/yandex#L143"
+          }
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "source_evidence": 100,
+    "suffix_rules": 75,
+    "exact_rules": 25,
+    "protected_hosts": 41,
+    "captures": 9,
+    "requests_scanned": 3670,
+    "requests_matched": 2,
+    "matched_platforms": [
+      "TANX"
+    ],
+    "on_device_tested": false
+  }
+}

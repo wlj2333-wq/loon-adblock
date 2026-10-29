@@ -1,0 +1,170 @@
+#!name = 通用广告平台屏蔽 v1.0.0
+#!desc = 精选 27 组国内及海外广告平台，100 条域名拦截规则，含 TANX。纯规则，无需 JS 或 MitM；对经过 Loon 的所有 App 生效，可能影响看广告领奖和广告跳转。
+#!author = wlj2333-wq
+#!homepage = https://github.com/wlj2333-wq/loon-adblock
+#!system = iOS,iPadOS,tvOS,macOS
+#!date = 2026-10-29
+#!tag = 去广告,通用
+# SPDX-License-Identifier: GPL-3.0-only
+# 平台及逐条来源：General-AdBlock-Platforms.md / general-adblock-domains.json
+# 无法覆盖全部第一方广告、缓存广告、共享业务接口或目录外的域名。
+
+[Rule]
+
+# ===== 国内/出海 =====
+
+# 阿里妈妈 TANX
+DOMAIN-SUFFIX,tanx.com,REJECT
+
+# 腾讯广告／优量汇
+DOMAIN-SUFFIX,gdt.qq.com,REJECT
+DOMAIN-SUFFIX,gdtimg.com,REJECT
+DOMAIN-SUFFIX,ugdtimg.com,REJECT
+DOMAIN-SUFFIX,pgdt.gtimg.cn,REJECT
+
+# 穿山甲／Pangle
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao1.com,REJECT
+DOMAIN-SUFFIX,pangolin-dsp-toutiao.com,REJECT
+DOMAIN-SUFFIX,pangolin-dsp-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,panplayable-toutiao.com,REJECT
+DOMAIN-SUFFIX,panplayable-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,pglstatp-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,pglstatp-sdk-toutiao.com,REJECT
+DOMAIN-SUFFIX,pglstatp-snssdk-toutiao.com,REJECT
+DOMAIN,pangolin.snssdk.com,REJECT
+DOMAIN,pangolin-hl.snssdk.com,REJECT
+DOMAIN,pangolin-lf.snssdk.com,REJECT
+DOMAIN,pangolin-lq.snssdk.com,REJECT
+DOMAIN-SUFFIX,pangle.io,REJECT
+
+# 百度联盟／百青藤
+DOMAIN,mobads.baidu.com,REJECT
+DOMAIN,mobads-logs.baidu.com,REJECT
+DOMAIN,cpro.baidu.com,REJECT
+DOMAIN-SUFFIX,cpro.baidustatic.com,REJECT
+DOMAIN,pos.baidu.com,REJECT
+DOMAIN,adscdn.baidu.com,REJECT
+DOMAIN,afd.baidu.com,REJECT
+DOMAIN,afdconf.baidu.com,REJECT
+DOMAIN,cbjs.baidu.com,REJECT
+
+# 快手广告／磁力引擎
+DOMAIN-SUFFIX,adkwai.com,REJECT
+DOMAIN-SUFFIX,adukwai.com,REJECT
+DOMAIN-SUFFIX,adbkwai.com,REJECT
+DOMAIN,open.e.kuaishou.cn,REJECT
+DOMAIN,open.e.kuaishou.com,REJECT
+DOMAIN,open.kuaishouzt.com,REJECT
+DOMAIN,open.kwaizt.com,REJECT
+
+# Mintegral
+DOMAIN-SUFFIX,mintegral.com,REJECT
+
+# Sigmob
+DOMAIN-SUFFIX,sigmob.com,REJECT
+DOMAIN-SUFFIX,sigmob.cn,REJECT
+
+# 倍孜／AdScope
+DOMAIN-SUFFIX,beizi.biz,REJECT
+
+# ===== 海外 =====
+
+# Google Ads／AdMob／DoubleClick
+DOMAIN-SUFFIX,doubleclick.net,REJECT
+DOMAIN-SUFFIX,doubleclick.cn,REJECT
+DOMAIN-SUFFIX,doubleclick.com,REJECT
+DOMAIN-SUFFIX,doubleclick-cn.net,REJECT
+DOMAIN-SUFFIX,googlesyndication.com,REJECT
+DOMAIN-SUFFIX,googlesyndication-cn.com,REJECT
+DOMAIN-SUFFIX,googleadservices.com,REJECT
+DOMAIN-SUFFIX,googleadservices-cn.com,REJECT
+DOMAIN-SUFFIX,googletagservices.com,REJECT
+DOMAIN-SUFFIX,googletagservices-cn.com,REJECT
+DOMAIN-SUFFIX,2mdn.net,REJECT
+DOMAIN-SUFFIX,2mdn-cn.net,REJECT
+DOMAIN,adservice.google.com,REJECT
+DOMAIN,mobileads.google.com,REJECT
+DOMAIN,pagead.l.google.com,REJECT
+DOMAIN,partnerad.l.google.com,REJECT
+
+# AppLovin
+DOMAIN-SUFFIX,applovin.com,REJECT
+DOMAIN-SUFFIX,applvn.com,REJECT
+
+# Unity Ads
+DOMAIN-SUFFIX,unityads.unity3d.com,REJECT
+DOMAIN-SUFFIX,iads.unity3d.com,REJECT
+
+# ironSource／LevelPlay
+DOMAIN-SUFFIX,supersonicads.com,REJECT
+DOMAIN-SUFFIX,ssacdn.com,REJECT
+DOMAIN,supersonicads-a.akamaihd.net,REJECT
+
+# Liftoff Monetize／Vungle
+DOMAIN-SUFFIX,vungle.com,REJECT
+
+# InMobi
+DOMAIN,ads.inmobi.com,REJECT
+DOMAIN,appgw.inmobi.com,REJECT
+DOMAIN,config.inmobi.com,REJECT
+DOMAIN-SUFFIX,inmobi.net,REJECT
+DOMAIN-SUFFIX,inmobi.cn,REJECT
+
+# Chartboost
+DOMAIN-SUFFIX,chartboost.com,REJECT
+DOMAIN-SUFFIX,chartboosts.com,REJECT
+
+# AdColony／Fyber 广告网络
+DOMAIN-SUFFIX,adcolony.com,REJECT
+DOMAIN-SUFFIX,fyber.com,REJECT
+DOMAIN-SUFFIX,inner-active.com,REJECT
+DOMAIN-SUFFIX,inner-active.mobi,REJECT
+
+# Amazon Ads
+DOMAIN-SUFFIX,amazon-adsystem.com,REJECT
+DOMAIN-SUFFIX,serving-sys.com,REJECT
+
+# Meta 广告域名（有限覆盖）
+DOMAIN-SUFFIX,facebookads.com,REJECT
+
+# Microsoft 广告域名（有限覆盖）
+DOMAIN-SUFFIX,microsoftads.com,REJECT
+DOMAIN-SUFFIX,msads.net,REJECT
+
+# Xandr／AppNexus
+DOMAIN-SUFFIX,adnxs.com,REJECT
+
+# Criteo
+DOMAIN-SUFFIX,criteo.com,REJECT
+DOMAIN-SUFFIX,criteo.net,REJECT
+
+# PubMatic
+DOMAIN-SUFFIX,pubmatic.com,REJECT
+DOMAIN-SUFFIX,pubmatic.co.jp,REJECT
+
+# OpenX
+DOMAIN-SUFFIX,openx.net,REJECT
+DOMAIN-SUFFIX,openxadexchange.com,REJECT
+DOMAIN-SUFFIX,openxcdn.net,REJECT
+DOMAIN-SUFFIX,openxenterprise.com,REJECT
+DOMAIN-SUFFIX,openxmarket.asia,REJECT
+
+# Index Exchange／Casale
+DOMAIN-SUFFIX,casalemedia.com,REJECT
+
+# Taboola
+DOMAIN-SUFFIX,taboola.com,REJECT
+
+# The Trade Desk
+DOMAIN-SUFFIX,adsrvr.org,REJECT
+
+# Yandex Ads／AdFox
+DOMAIN-SUFFIX,adfox.ru,REJECT
+DOMAIN-SUFFIX,adfox.yandex.ru,REJECT
+DOMAIN-SUFFIX,an.yandex.ru,REJECT
+DOMAIN-SUFFIX,bs.yandex.ru,REJECT
+DOMAIN,adsdk.yandex.ru,REJECT
+DOMAIN-SUFFIX,yads.tech,REJECT
