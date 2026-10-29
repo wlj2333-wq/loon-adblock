@@ -1,6 +1,7 @@
 # Loon 去广告插件
 
 - [哔哩哔哩 v1.3.0（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
+- [TANX 广告域名屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Tanx-AdBlock.plugin)
 - [酷狗音乐 v1.1.0（复写版）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)
 
 哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.0。首页与开屏仍使用原生复写，只为播放页新增二进制辅助脚本。酷狗文件保持原样。
@@ -73,3 +74,20 @@
 - [社区整理的广告卡片和模块定义](https://github.com/bilibili-plugins/bilibili-api-collect/blob/master/grpc_api/bilibili/app/viewunite/common.proto)
 
 社区定义用于字段含义核对；实际字节结构另与用户 HAR 验证。仓库不包含原始 HAR、令牌、账号数据或私人配置。
+
+## TANX 广告提供商域名拦截
+
+在 Loon「插件」添加 [Tanx-AdBlock.plugin](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Tanx-AdBlock.plugin) 并启用，可与本仓库其他插件同时使用。
+
+```ini
+[Rule]
+DOMAIN-SUFFIX,tanx.com,REJECT
+```
+
+规则覆盖 `tanx.com` 和它的全部子域名，包括本次抓包出现的 `ef-dongfeng.tanx.com`，而非只拦截一个监测请求或某个带参数的网址。它会阻断匹配域名的连接，对所有经过 Loon 的 App 生效，不仅是哔哩哔哩；无需 JS、复写总开关或 MitM 证书。使用规则模式，且主配置中若有更高优先级的直连规则，需要避免其提前放行此域名。
+
+[TANX 官网](https://tanx.com/)与[官方 SDK 隐私政策](https://terms.alicdn.com/legal-agreement/terms/suit_bu1_ali_mama_division/suit_bu1_ali_mama_division202202171548_47251.html)确认其广告平台与广告投放、监测用途。[Loon 域名规则文档](https://nsloon.app/docs/Rule/domain_rule/)说明 DOMAIN-SUFFIX 的匹配范围。
+
+本插件不扩大到淘宝、阿里云或其他共享 CDN 域名。通过 B 站自有接口、缓存或其他域名提供的广告不属于这条后缀规则的覆盖范围，不能据此声称该平台的全部广告都已消失。实际展示效果仍需设备验证。
+
+本地核对本次 51 条请求中有 1 条匹配此规则，并检查了域名边界；未重放带监测参数的请求，也未将其参数发布到仓库。
