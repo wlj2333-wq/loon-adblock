@@ -1,0 +1,11 @@
+#!name = TANX 广告域名屏蔽 v1.0.0
+#!desc = 拦截 tanx.com 及其全部子域名的连接，对经过 Loon 的所有 App 生效。纯域名规则，无需 JS、复写或 MitM；无法覆盖从其他域名下发的广告。
+#!author = wlj2333-wq
+#!homepage = https://github.com/wlj2333-wq/loon-adblock
+#!system = iOS,iPadOS,tvOS,macOS
+#!date = 2026-10-29
+#!tag = 去广告,TANX
+
+[Rule]
+# 包括 ef-dongfeng.tanx.com，以及其他当前或将来的 tanx.com 子域名。
+DOMAIN-SUFFIX,tanx.com,REJECT
