@@ -2,11 +2,23 @@
 
 推荐通用域名拦截：[通用广告平台屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/General-AdBlock.plugin)，收录 **27 组平台、100 条规则**，已包含 TANX。完整平台与来源见 [平台目录](General-AdBlock-Platforms.md)。无需 JS 或 MitM，可与下方 B 站、酷狗专用插件一起启用。
 
-- [哔哩哔哩 v1.3.0（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
+- [哔哩哔哩 v1.3.1（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
 - [TANX 广告域名屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Tanx-AdBlock.plugin)
 - [酷狗音乐 v1.1.0（复写版）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)
 
-哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.0。首页与开屏仍使用原生复写，只为播放页新增二进制辅助脚本。酷狗文件保持原样。
+哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.1。首页与开屏仍使用原生复写；开屏 `list/show` 改为本地成功空响应，只为播放页加载二进制辅助脚本。酷狗文件保持原样。
+
+## 开屏更新：v1.3.1
+
+已在未经复写的响应中核对到此前出现的淘宝广告视频：它由 B 站 `/x/v2/splash/list` 下发，并带有预下载与后台下载开关。两次原始列表分别有 86、87 条素材；监测请求是否被阻断不能代表素材已被移除。
+
+现在仅针对 `/x/v2/splash/list` 和 `/x/v2/splash/show` 的 GET 请求，使用 Loon 原生 `response.body.mock` 在请求发往上游前返回 HTTP 200 和成功空列表，同时将本地响应的 `max_time` 设为 0。该字段的实际客户端效果仍需手机验证。无需增加 JS；品牌、活动、首页和播放页的处理方式保持原样。语法依据 [Loon 官方 Mock 响应文档](https://nsloon.app/docs/Rewrite/rewrite_v2/#mock-响应-body)。
+
+原开屏列表清空规则在该样本的本地结构检查中同样能够清空广告；本次改变用于避免继续获取整份开屏配置，不将“新供应商”“响应过大”或“旧缓存”当作已经证实的漏拦原因。插件不能直接删除 App 缓存，也不保证覆盖未捕获的开屏来源。
+
+更新并重新启用插件后，完全退出并打开 B 站。开屏 `list/show` 的响应头应为 `X-Bilibili-AdBlock: 1.3.1-local-splash`，数据中的 `list`、`show`、`keep_ids` 应为空数组。其他原生复写的标记为 `1.3.1-hybrid`，播放页脚本及其日志版本仍为 `1.3.0`。本次离线扫描三份抓包共 283 条请求，匹配 7 个目标请求；未经修改的两份列表共含 173 条素材、对应展示列表合计 103 项，均被本地空响应替换。验证还检查了请求方法及网址边界，品牌、活动、首页、播放页与普通视频不会命中这条新增 Mock。此处只验证 URL 匹配和本地数据结构，不执行 Loon 内核，也不等同于真机测试。
+
+回退可使用 [v1.3.0 固定版本](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/beb33c2c31fda8fc943521745eada6ccb60f37fc/Bilibili-AdBlock-v1.2-Rewrite.plugin)。原始 HAR、监测参数与账号信息不上传仓库。
 
 ## 哔哩哔哩安装
 
@@ -34,7 +46,7 @@
 
 没有匹配视频播放地址接口 `Player/PlayViewUnite`、弹幕接口或整个 gRPC 域名。没有加入额外联网、持久存储或账号日志。该版本不保证覆盖其他业务接口、缓存广告和未来变更的数据结构。
 
-## 最新抓包与验证证据
+## 播放页版本的历史验证证据
 
 最新 HAR 含 483 条请求，出现 6 条原生复写记录；其中 5 个完整响应记录了 Body 复写。后续开屏、品牌画面、活动列表及首页已出现清理结果；另一次开屏请求中途被客户端关闭，不能当作完成清理的证据。因此原生复写已执行，新增播放页广告属于不同的数据接口。
 
@@ -52,7 +64,7 @@
 
 ## 如何验证
 
-首页与开屏查看「复写记录」，匹配响应头标记为 `X-Bilibili-AdBlock: 1.3.0-hybrid`。该 Header 只确认相应 Action 执行，仍应结合返回数据判断清理效果。
+首页与开屏查看「复写记录」：`list/show` 标记为 `X-Bilibili-AdBlock: 1.3.1-local-splash`，其他原生复写为 `1.3.1-hybrid`。该 Header 只确认相应 Action 执行，仍应结合返回数据判断清理效果。
 
 播放页在「脚本」记录中查看日志：
 
