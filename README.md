@@ -2,13 +2,33 @@
 
 推荐通用域名拦截：[通用广告平台屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/General-AdBlock.plugin)，收录 **27 组平台、100 条规则**，已包含 TANX。完整平台与来源见 [平台目录](General-AdBlock-Platforms.md)。无需 JS 或 MitM，可与下方 B 站、酷狗专用插件一起启用。
 
-- [哔哩哔哩 v1.3.1（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
+- [哔哩哔哩 v1.3.2（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
 - [TANX 广告域名屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Tanx-AdBlock.plugin)
 - [酷狗音乐 v1.1.0（复写版）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)
 
-哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.1。首页与开屏仍使用原生复写；开屏 `list/show` 改为本地成功空响应，只为播放页加载二进制辅助脚本。酷狗文件保持原样。
+哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.2。首页与开屏仍使用原生复写；开屏 `list/show` 返回本地成功空响应，另补拦已确认的单条开屏视频下载，只为播放页加载二进制辅助脚本。酷狗文件保持原样。
 
-## 开屏更新：v1.3.1
+## 开屏补充：v1.3.2
+
+2026-10-30 用户反馈京东开屏广告。本次 48 条请求中，唯一的 `/x/v2/splash/list` 已在 11:12:04.050 发起、约 7 ms 后完成本地响应，带有 `X-Bilibili-AdBlock: 1.3.1-local-splash`，`max_time=0`，`keep_ids/list/show` 均为空。说明 v1.3.1 的 Mock 已执行；空响应及 `max_time=0` 在这次启动中仍未阻止广告展示，不能当作客户端关闭开屏的保证。
+
+同一素材的展示上报时间约为 11:12:04.205，视频实际播放上报约 2.8 秒。素材 ID 已出现在请求的 `loaded_creative_list` 中，且本次没有该视频的下载请求；另有缓存监测上报。上述证据支持已加载或缓存素材继续播放的判断，但没有捕获最初下载过程，也不能排除未捕获的网络来源。上报内关联到 `im-x.jd.com/dsp/np` 京东监测地址；监测提交失败后仍有视频播放上报，屏蔽监测不能等同于移除广告。
+
+本次只补拦已确认的视频路径：
+
+```text
+https://upos-sz-static.bilivideo.com/ssaxcode/jb/2r/n261028a210b9cll18b0cnj9e3ys2rjb-1-SiteTool_1080.mp4
+```
+
+使用原生请求阶段 `reject(403)`，匹配此主机及完整路径的 HTTP/HTTPS GET、HEAD，可带查询参数；新增该主机到 MitM。语法依据 [Loon 官方 Reject 文档](https://nsloon.app/docs/Rewrite/rewrite_v2/#reject)。这是阻止此素材再次联网下载的补充，不会清理 App 内存或磁盘中的已有副本，也不保证拦截更换地址后的广告。未扩大为整个 CDN 或整个 `ssaxcode` 目录的拦截。
+
+更新插件并确认显示 v1.3.2 后，可先使用 B 站应用内的清理缓存功能，再完全退出并重开。该清理功能是否包含开屏素材仍需手机验证，不能承诺一次清理即可消失。若仍出现，保留覆盖本次启动的抓包；如果视频全程没有联网请求，Loon 的 URL 规则无法拦截本地副本的播放。插件不能直接操作 B 站本地缓存。
+
+当前开屏空响应标记更新为 `1.3.2-local-splash`，其他原生复写为 `1.3.2-hybrid`；播放页脚本仍为 v1.3.0。离线验证需区分实际请求和上报内嵌地址：此 HAR 实际命中 1 条开屏 Mock、0 条新增素材拦截；上报关联的视频地址命中新增规则。另以 6 个正例、15 个反例检查网址和方法边界，全部通过；同时核对原有响应规则与播放页脚本引用除版本标记外保持一致。发布文本未包含本次离线提取的 13 项账号、设备或认证值。以上检查不能据此宣称已在手机阻断视频或解决缓存广告。原始 HAR、账号与监测参数不上传仓库。
+
+回退本次补充可使用 [v1.3.1 固定版本](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/331de430002c16d35efc29d6a1a8e042e578a6b2/Bilibili-AdBlock-v1.2-Rewrite.plugin)。
+
+## 开屏更新：v1.3.1（历史）
 
 已在未经复写的响应中核对到此前出现的淘宝广告视频：它由 B 站 `/x/v2/splash/list` 下发，并带有预下载与后台下载开关。两次原始列表分别有 86、87 条素材；监测请求是否被阻断不能代表素材已被移除。
 
@@ -64,7 +84,7 @@
 
 ## 如何验证
 
-首页与开屏查看「复写记录」：`list/show` 标记为 `X-Bilibili-AdBlock: 1.3.1-local-splash`，其他原生复写为 `1.3.1-hybrid`。该 Header 只确认相应 Action 执行，仍应结合返回数据判断清理效果。
+首页与开屏查看「复写记录」：当前版本 `list/show` 标记为 `X-Bilibili-AdBlock: 1.3.2-local-splash`，其他原生复写为 `1.3.2-hybrid`。新增的单条视频请求拦截应显示上述完整素材路径及本地 403；没有视频网络请求时不会产生该拦截记录。该 Header 只确认相应 Action 执行，仍应结合返回数据判断清理效果。
 
 播放页在「脚本」记录中查看日志：
 
