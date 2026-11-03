@@ -1,5 +1,5 @@
-#!name = 哔哩哔哩去广告 v1.4.0（含实验直播净化）
-#!desc = 保留原开屏、首页与播放页处理；新增默认关闭的实验直播横幅及购物展示净化。公开字段先例不等于当前手机有效。需开启复写、脚本及 MitM。
+#!name = 哔哩哔哩去广告 v1.4.1（含实验直播净化）
+#!desc = 保留原开屏、首页与播放页处理；默认关闭的直播净化新增首页顶部轮播覆盖，另保留房间横幅及购物实验。HAR回放不等于界面实测成功。需开启复写、脚本及 MitM。
 #!author = wlj2333-wq
 #!homepage = https://github.com/wlj2333-wq/loon-adblock
 #!system = iOS,iPadOS
@@ -8,7 +8,7 @@
 #!tag = 去广告,哔哩哔哩
 
 [Argument]
-live_activity_banner = switch,false,tag=实验：直播活动横幅,desc=仅处理已识别房间信息字段；未获当前手机验证
+live_activity_banner = switch,false,tag=实验：直播首页轮播/房间横幅,desc=移除已识别直播首页顶部整块轮播并清空房间横幅字段；新版本界面待验证
 live_shopping = switch,false,tag=实验：直播购物展示,desc=只关闭房间信息中已有的购物展示标志；不保证隐藏原生按钮
 live_debug = switch,false,tag=直播诊断日志,desc=开启净化后仅记录处理数量和固定错误类别；不保存正文或参数
 
@@ -38,8 +38,9 @@ response if ${url} ~= /^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story
 # 仅处理抓包确认的三个 gRPC 接口；播放地址与弹幕接口不在匹配范围内。
 http-response ^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.viewunite\.v1\.View\/(?:View|RelatesFeed|PlayPause)(?:\?|$) script-path=https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-PlayerAds.v1.3.js,requires-body=true,binary-body-mode=true,timeout=10,tag=B站v1.3播放页广告,enable=true
 
-# 默认关闭；仅白名单房间信息 GET 的成功 JSON 响应，不匹配播放流、弹幕或购物交易接口。
-response if (${live_activity_banner} == true || ${live_shopping} == true) && ${request.method} == "GET" && ${url} ~= /^https:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom(?:\?[^#]*)?$/ && ${response.status} == 200 then script("https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/cc18268ba9cefb32856303737620bce04f2552d9/Bilibili-LiveClean.v1.0.js", {${live_activity_banner}, ${live_shopping}, ${live_debug}}) with requires_body=true, timeout=10, tag="B站实验直播净化"
+# 默认关闭；仅白名单直播首页/房间信息 GET 的成功 JSON 响应，不匹配播放流、弹幕或购物交易接口。
+# 直播脚本固定引用已审阅提交，可在开发分支直接试用。
+response if (${live_activity_banner} == true || ${live_shopping} == true) && ${request.method} == "GET" && ${url} ~= /^https:\/\/api\.live\.bilibili\.com\/xlive\/(?:app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoByRoom)(?:\?[^#]*)?$/ && ${response.status} == 200 then script("https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/9694bed0c8fce61935108b7e9f33c78727cba2ce/Bilibili-LiveClean.v1.0.js", {${live_activity_banner}, ${live_shopping}, ${live_debug}}) with requires_body=true, timeout=10, tag="B站实验直播净化"
 
 [Mitm]
 hostname = app.bilibili.com,grpc.biliapi.net,upos-sz-static.bilivideo.com,api.live.bilibili.com
