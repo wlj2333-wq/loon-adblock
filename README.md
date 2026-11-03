@@ -2,11 +2,45 @@
 
 推荐通用域名拦截：[通用广告平台屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/General-AdBlock.plugin)，收录 **27 组平台、100 条规则**，已包含 TANX。完整平台与来源见 [平台目录](General-AdBlock-Platforms.md)。无需 JS 或 MitM，可与下方 B 站、酷狗专用插件一起启用。
 
-- [哔哩哔哩 v1.3.2（复写＋播放页脚本）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Bilibili-AdBlock-v1.2-Rewrite.plugin)
+- [哔哩哔哩 v1.4.0 试用版（复写＋播放页脚本，含默认关闭的实验直播净化）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/codex/bilibili-live-clean-v1.4.0/Bilibili-AdBlock-v1.2-Rewrite.plugin)
 - [TANX 广告域名屏蔽 v1.0.0](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/Tanx-AdBlock.plugin)
 - [酷狗音乐 v1.1.0（复写版）](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/main/KuGou-AdBlock.plugin)
 
-哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.3.2。首页与开屏仍使用原生复写；开屏 `list/show` 返回本地成功空响应，另补拦已确认的单条开屏视频下载，只为播放页加载二进制辅助脚本。酷狗文件保持原样。
+哔哩哔哩沿用原订阅路径，文件名中的 v1.2 是历史名称；导入后插件名称应显示 v1.4.0。首页、开屏和播放页的原有规则保持原样。直播净化为独立的可选 JSON 脚本，两个功能默认关闭；首次启用需验证当前手机是否仍使用已登记字段。酷狗文件保持原样。
+
+## 直播净化实验：v1.4.0
+
+v1.4.0 当前在开发分支试用，尚未合并 main；原 main 订阅仍为 v1.3.2。试用请使用上面的独立链接，并停用原 B 站插件以避免重复处理；回退时停用试用插件，再启用原插件。新增直播脚本固定引用提交 `cc18268ba9cefb32856303737620bce04f2552d9`，可在合并前加载，也不依赖开发分支长期保留。
+
+基于 v1.3.2 增加两项独立开关，不改变原来的开屏、首页与播放页处理。当前没有用户此版本的直播 HAR 或手机验证；下列字段来自公开脚本先例，不能据此保证当前 App 会隐藏对应组件。
+
+| 插件参数 | 默认 | 处理范围 |
+| --- | --- | --- |
+| 实验：直播活动横幅 | 关闭 | 已有 `data.activity_banner_info` 为对象时，将该对象置为 `null`；其他类型保留 |
+| 实验：直播购物展示 | 关闭 | 仅将已有 `data.shopping_info.is_show` 的整数 `1` 改为 `0`，布尔 `true` 改为 `false`；保留购物数据的其他字段和未知类型 |
+| 直播诊断日志 | 关闭 | 净化开启时记录处理数量、是否修改及固定错误类别，不输出房间号、查询参数、账号或正文，不使用持久化存储 |
+
+只登记 `https://api.live.bilibili.com/xlive/app-room/v1/index/getInfoByRoom` 的 GET、HTTP 200、JSON 响应，且顶层 `code` 必须是原始数字字面量 `0`。只启用诊断日志不会触发接口脚本。新增 `api.live.bilibili.com` 到 MitM 是为解密该接口，脚本没有匹配整个直播域名；开关关闭时仍保留此主机的 MitM 配置。
+
+没有匹配直播播放地址、`getDanmuInfo`、WebSocket、弹幕发送、购物交易或权限接口。不处理推荐直播间、皮肤、PK 特效、礼物栏、排行榜或实时礼物消息；没有足够的当前接口证据或 Loon 可用能力时，不提供对应开关。保留普通直播、弹幕输入、关注、主播信息及未知字段。主播嵌在视频里的广告与本地缓存内容不属于此功能范围。
+
+新增 `Bilibili-LiveClean.v1.0.js` 不联网、不下载运行库，不收集或保存账号资料，不记录正文。脚本会读取完整响应：先用 `JSON.parse` 校验完整 JSON，再定位白名单字段的原文区间；校验结果不会重新序列化，避免改变 64 位 ID、数值字面量和其他内容的格式。任意重复键（含转义后重名）、非法 JSON、超限结构或异常都原样放行。正文限制为 2,097,152 个 JavaScript 字符，扫描深度不超过 64、节点不超过 100,000。没有发生修改时返回原响应；发生修改时移除已失效的长度、压缩及摘要头，添加 `X-Bilibili-Live-Clean: 1.0.0`。
+
+### 试用与手机核对
+
+1. 更新插件与新增直播脚本，确认插件名称为 v1.4.0，MitM 已启用并信任证书。
+2. 首先只开启“实验：直播活动横幅”和“直播诊断日志”，退出并重新进入一个此前有活动横幅的直播间。
+3. 检查该房间信息请求是否命中，以及横幅是否消失；切换直播间、横竖屏、全屏和画质，核对播放、普通弹幕、弹幕发送及关注是否正常。
+4. 再单独试用“实验：直播购物展示”，只在此前实际出现购物推广的直播间比较。原生购物按钮不一定由该标志控制；未消失时不能据此扩大拦截范围。
+5. 记录 B 站版本、开启的开关、界面结果及固定格式日志即可。需要进一步定位时再提供对应时间段的脱敏请求证据；不要上传原始 HAR、Cookie、令牌或账号资料到公开仓库。
+
+日志示例 `[BilibiliLiveClean 1.0.0] banner=1 shopping=0 changed=true` 只表明 JSON 中一个已登记对象被替换，不表示手机横幅已经消失。测试结束关闭日志；如遇异常，关闭对应实验开关并重新进房。完整回退使用 [v1.3.2 固定插件](https://raw.githubusercontent.com/wlj2333-wq/loon-adblock/03ccc1408a3254419e0421813e41b3aac89def5e/Bilibili-AdBlock-v1.2-Rewrite.plugin)，它不含新增直播规则或直播脚本。
+
+### 本地验证与来源
+
+运行 `node tests/bilibili-live-clean.test.cjs`：67 项测试通过，覆盖功能开关、HTTP 边界、长整数原文保留、未知字段和类型、布尔展示标志、转义键、重复键、非法 JSON、数值精度反例、超深／超大／过多节点、日志脱敏及表示头清理。独立审阅测试运行 `node tests/bilibili-live-review.cjs`，包含 1,532 次脚本执行、配置参数接线和原有规则回归检查。测试使用合成数据和 Node VM，未执行 Loon 内核，不能替代手机测试。原有播放页脚本与原生复写没有改动。
+
+字段来源、实现边界与验证限制见 [直播净化来源说明](docs/Bilibili-LiveClean-Sources.md)。购物标志仅有公开规则先例，尚无当前 App 协议或本机抓包证据；因此两个功能均以默认关闭的实验项发布。
 
 ## 开屏补充：v1.3.2
 
@@ -42,7 +76,7 @@ https://upos-sz-static.bilivideo.com/ssaxcode/jb/2r/n261028a210b9cll18b0cnj9e3ys
 
 ## 哔哩哔哩安装
 
-在 Loon「插件」更新或添加上面的哔哩哔哩链接，开启 **复写（Rewrite）、脚本（Script）和 MitM**，安装并信任自己的 MitM 证书。需要 Loon Build 988+，用户当前 3.5.2 (1005) 满足声明的版本要求。插件自动加载 `Bilibili-PlayerAds.v1.3.js`，无需另建 JS 订阅。
+在 Loon「插件」更新或添加上面的哔哩哔哩链接，开启 **复写（Rewrite）、脚本（Script）和 MitM**，安装并信任自己的 MitM 证书。需要 Loon Build 988+；请在 Loon 关于页面核对当前 Build，本轮未确认手机上的实际版本。插件自动加载播放页和直播辅助脚本，无需另建 JS 订阅；直播脚本仅在对应实验开关启用时处理响应。
 
 完全退出 B 站后重新打开测试；避免同时启用其他处理相同广告响应的插件。此前纯复写版已保存在本地备份，Git 历史保留。
 
@@ -54,7 +88,7 @@ https://upos-sz-static.bilivideo.com/ssaxcode/jb/2r/n261028a210b9cll18b0cnj9e3ys
 - 首页整块顶部轮播、会员购推广和已识别的信息流广告卡片。
 - 竖屏流独立广告列表。
 
-辅助 JS 只匹配 `grpc.biliapi.net` 的三个方法：
+播放页辅助 JS 只匹配 `grpc.biliapi.net` 的三个方法：
 
 | 方法 | 处理 |
 | --- | --- |
@@ -125,3 +159,4 @@ DOMAIN-SUFFIX,tanx.com,REJECT
 本插件不扩大到淘宝、阿里云或其他共享 CDN 域名。通过 B 站自有接口、缓存或其他域名提供的广告不属于这条后缀规则的覆盖范围，不能据此声称该平台的全部广告都已消失。实际展示效果仍需设备验证。
 
 本地核对本次 51 条请求中有 1 条匹配此规则，并检查了域名边界；未重放带监测参数的请求，也未将其参数发布到仓库。
+
