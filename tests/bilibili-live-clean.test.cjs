@@ -134,15 +134,15 @@ test('changed responses remove stale representation headers; unrelated headers s
   const headers = {'Content-Type': 'application/json', 'Content-Length': '123', 'content-encoding': 'gzip',
     ETag: 'old', Digest: 'old', 'Content-MD5': 'old', 'Transfer-Encoding': 'chunked', 'X-Other': 'keep'};
   const result = run(input, {response: {headers}}).result;
-  assert.deepEqual(result.headers, {'Content-Type': 'application/json', 'X-Other': 'keep', 'X-Bilibili-Live-Clean': '1.0.0'});
+  assert.deepEqual(result.headers, {'Content-Type': 'application/json', 'X-Other': 'keep', 'X-Bilibili-Live-Clean': '1.1.0'});
 });
 
 test('diagnostics are silent by default and never contain payload, URL or error text', () => {
   assert.deepEqual(run(input).logs, []);
   const success = run(input, {args: {live_debug: true}, request: {url: url + '&access_key=SECRET'}});
-  assert.deepEqual(success.logs, ['[BilibiliLiveClean 1.0.0] banner=1 shopping=1 changed=true']);
+  assert.deepEqual(success.logs, ['[BilibiliLiveClean 1.1.0] home_carousels=0 banner=1 shopping=1 changed=true']);
   const broken = run(input + 'SECRET', {args: {live_debug: true}});
-  assert.deepEqual(broken.logs, ['[BilibiliLiveClean 1.0.0] skip invalid-or-unsupported-json; unchanged']);
+  assert.deepEqual(broken.logs, ['[BilibiliLiveClean 1.1.0] skip invalid-or-unsupported-json; unchanged']);
 });
 
 test('generated unrelated number and string payloads retain exact source text', () => {
@@ -150,4 +150,73 @@ test('generated unrelated number and string payloads retain exact source text', 
     const body = '{"code":0,"data":{"activity_banner_info":{"i":' + i + '},"unknown":{"id":92233720368547758' + String(i).padStart(2, '0') + ',"s":' + JSON.stringify('x"\\\n' + i) + ',"n":1.2300e+08}}}';
     assert.equal(run(body).result.body, body.replace('{"i":' + i + '}', 'null'));
   }
+});
+
+const homeUrl = 'https://api.live.bilibili.com/xlive/app-interface/v2/index/feed';
+const carousel = '{"card_type":"banner_v2","card_data":{"banner_v2":{"list":[{"static":{"title":"公开活动示例"}}]}}}';
+function home(body, options = {}) { return run(body, {...options, request: {url: homeUrl, ...options.request}}); }
+
+test('captured homepage shape loses only carousel; follow/area/20 live cards and pagination keep original text', () => {
+  const cards = [carousel,
+    '{"card_type":"my_idol_v1","card_data":{"unknown":9223372036854775807}}',
+    '{"card_type":"area_entrance_v3","card_data":{"unknown":[1,2,3]}}',
+    ...Array.from({length: 20}, (_, i) => '{"card_type":"small_card_v1","card_data":{"synthetic_index":' + i + ',"long_number":9223372036854775807,"exact":1.2300e+08}}')];
+  const prefix = '{"code":0,"data":{"card_list":[  ';
+  const suffix = '  ],"has_more":1,"trigger_time":9223372036854775807,"feature_switch":{"unknown":true},"activity_banner_info":{"keep":true},"shopping_info":{"is_show":1}}}';
+  const result = home(prefix + cards.join(' , \n  ') + suffix, {args: {live_debug: true}});
+  assert.equal(result.result.body, prefix + cards.slice(1).join(' , \n  ') + suffix);
+  assert.deepEqual(result.logs, ['[BilibiliLiveClean 1.1.0] home_carousels=1 banner=0 shopping=0 changed=true']);
+});
+
+test('all removal positions and adjacent groups preserve surviving cards and JSON syntax', () => {
+  for (let mask = 1; mask < 32; mask++) {
+    const cards = Array.from({length: 5}, (_, i) => mask & (1 << i) ? carousel :
+      '{"card_type":"unknown_' + i + '","card_data":{"exact":1.2300e+08,"id":9223372036854775807}}');
+    const body = '{"code":0,"data":{"card_list":[ \n' + cards.join(' ,\t') + '\n ],"has_more":1}}';
+    const result = home(body).result.body;
+    const parsed = JSON.parse(result);
+    const retained = cards.filter((_, i) => !(mask & (1 << i)));
+    assert.equal(parsed.data.card_list.length, retained.length);
+    for (const raw of retained) assert.ok(result.includes(raw), 'surviving item preserves every original character');
+    assert.ok(result.endsWith('\n ],"has_more":1}}'), 'unrelated suffix survives');
+    assert.equal(parsed.data.has_more, 1);
+    assert.deepEqual(home(result).result, {}, 'idempotent after removing known carousel');
+  }
+});
+
+test('homepage only removes the documented type plus known payload structure', () => {
+  const unknownCards = [
+    '{"card_type":"banner_v1","card_data":{"banner_v2":{"list":[]}}}',
+    '{"card_type":"banner_v2","card_data":{"banner_v2":{"list":{}}}}',
+    '{"card_type":"banner_v2","card_data":{"banner_v2":[]}}',
+    '{"card_type":"banner_v2","card_data":{"list":[]}}',
+    '{"card_type":"banner_v2","card_data":null}',
+    '{"card_type":"banner_v2","card_data":[]}',
+    '{"card_type":"banner_v2"}', 'null', '[]', '1',
+    '{"card_type":"small_card_v1","card_data":{"banner_v2":{"list":[]},"title":"banner_v2"}}',
+    '{"card_type":"unknown","card_data":{"nested":' + carousel + '}}',
+  ];
+  const body = '{"code":0,"data":{"card_list":[' + unknownCards.join(',') + ']}}';
+  assert.deepEqual(home(body).result, {});
+  assert.equal(home(body.replace('"card_list":[', '"card_list":[' + carousel + ',')).result.body, body);
+});
+
+test('carousel requires its switch, exact route and a successful response', () => {
+  const body = '{"code":0,"data":{"card_list":[' + carousel + ']}}';
+  assert.deepEqual(home(body, {args: {live_activity_banner: false, live_shopping: true, live_debug: true}}), {result: {}, logs: []});
+  for (const request of [
+    {method: 'POST'}, {method: 'HEAD'},
+    {url: homeUrl.replace('/v2/', '/v1/')}, {url: homeUrl + '/extra'}, {url: homeUrl + '#fragment'},
+    {url: homeUrl.replace('api.live.bilibili.com', 'api.live.bilibili.com.evil.test')},
+  ]) assert.deepEqual(home(body, {request}).result, {});
+  assert.deepEqual(home(body, {response: {status: 500}}).result, {});
+  assert.deepEqual(home(body.replace('"code":0', '"code":1e-400')).result, {});
+  assert.deepEqual(home(body, {request: {url}}).result, {}, 'room route never touches homepage card_list');
+});
+
+test('homepage escaped keys work, but ambiguous duplicate keys fail open', () => {
+  const escaped = '{"code":0,"data":{"card_\\u006cist":[{"card_\\u0074ype":"banner_\\u00762","card_data":{"banner_v2":{"list":[]}}}]}}';
+  assert.equal(home(escaped).result.body, '{"code":0,"data":{"card_\\u006cist":[]}}');
+  const duplicate = '{"code":0,"data":{"card_list":[{"card_type":"banner_v2","card_\\u0074ype":"small_card_v1","card_data":{"banner_v2":{"list":[]}}}]}}';
+  assert.deepEqual(home(duplicate).result, {});
 });
