@@ -79,4 +79,34 @@ const liveRegexText = liveRule.match(/\$\{url\} ~= (\/.*?\/) &&/)[1];
 const liveRegex = new RegExp(liveRegexText.slice(1,-1));
 assert(liveRegex.test(url));
 for(const suffix of ['getInfoByRoomExtra','getInfoByUser','getDanmuInfo','getRoomPlayInfo']) assert(!liveRegex.test(url.replace('getInfoByRoom',suffix)));
+const homeURL = 'https://api.live.bilibili.com/xlive/app-interface/v2/index/feed?page=1';
+assert(liveRegex.test(homeURL));
+for(let size=1;size<=7;size++) {
+  for(let mask=0;mask<(1<<size);mask++) {
+    const cards=Array.from({length:size},(_,i)=>(mask&(1<<i))
+      ? `{"card_type":"banner_v2","card_data":{"banner_v2":{"list":[]}},"removed_marker":${i}}`
+      : `{"card_type":"small_card_v1","card_data":{"uid":18446744073709551615,"retained_marker":${i}},"title":"广告这个词不应决定是否删除"}`);
+    const input=` {"code":0,"data":{"card_list":[ \n${cards.join(' , \n')}\n ],"pagination":{"page":2,"token":"synthetic"}},"other":18446744073709551615}\n`;
+    const {result}=execute(input,{request:{url:homeURL}});
+    if(!mask) {assert.deepEqual(Object.keys(result),[]);continue;}
+    const output=result.body,parsed=JSON.parse(output),expected=cards.filter((_,i)=>!(mask&(1<<i)));
+    assert.equal(parsed.data.card_list.length,expected.length,'selected items only');
+    for(const card of expected) assert(output.includes(card),'retained cards preserve exact source text');
+    assert(!output.includes('"removed_marker"'),'all selected ranges removed');
+    assert.equal(parsed.data.pagination.token,'synthetic');
+    assert(output.endsWith(',"pagination":{"page":2,"token":"synthetic"}},"other":18446744073709551615}\n'));
+  }
+}
+for(const card of [
+  '{"card_type":"banner_v2"}',
+  '{"card_type":"banner_v2","card_data":{"banner_v2":null}}',
+  '{"card_type":"banner_v2","card_data":{"banner_v2":{"list":{}}}}',
+  '{"card_type":"banner_v3","card_data":{"banner_v2":{"list":[]}}}',
+  '{"card_type":"small_card_v1","card_data":{"banner_v2":{"list":[]}}}',
+  'null','1','[]'
+]) unchanged('{"code":0,"data":{"card_list":['+card+']}}',{request:{url:homeURL}});
+for(const badURL of [homeURL.replace('/v2/','/v3/'),homeURL.replace('feed?','feedExtra?'),homeURL.replace('feed?','feed/extra?'),homeURL+'#fragment']) {
+  assert(!liveRegex.test(badURL));
+  unchanged('{"code":0,"data":{"card_list":[{"card_type":"banner_v2","card_data":{"banner_v2":{"list":[]}}}]}}',{request:{url:badURL}});
+}
 console.log(JSON.stringify({review:'independent synthetic HTTP/JSON and stable-rule checks',runs,deviceTest:false}));
